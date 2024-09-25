@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sortable_wrap/flutter_sortable_wrap.dart';
@@ -21,6 +22,7 @@ class AppState extends State<App> {
   late List<Widget> _children;
   late List<Color> colors;
   late int test;
+  ValueNotifier<bool> _addShow = ValueNotifier(true);
 
   @override
   void initState() {
@@ -62,6 +64,9 @@ class AppState extends State<App> {
         },
       ));
     }
+    _children.add(_AddButton(
+      valueListenable: _addShow,
+    ));
   }
 
   @override
@@ -96,13 +101,18 @@ class AppState extends State<App> {
             color: Colors.white.withAlpha(64),
             child: SortableWrap(
               key: Key(Random().nextDouble().toString()),
-              onSorted: (int oldIndex, int newIndex) {},
+              onSorted: (int oldIndex, int newIndex) {
+                _addShow.value = true;
+              },
               spacing: 10,
               runSpacing: 15,
               options: options,
               children: _children,
               onSortStart: (index) {
+                var x = _children;
+                print(index);
                 _contentShow.value = false;
+                _addShow.value = false;
               },
             ),
           ),
@@ -168,21 +178,35 @@ class Item extends StatelessWidget {
           // 必须要一个Material，不然拖动时Text会有双下划线
           data: index,
           feedback: Material(
-            child: Container(
-              height: 100,
-              width: 100,
-              color: Colors.blueAccent,
-              alignment: Alignment.center,
-              child: Text(
-                text,
-                style: TextStyle(color: Colors.white),
+            child: Transform.scale(
+              scale: 1.5,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                constraints: BoxConstraints(minWidth: 50.w),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  color: color,
+                ),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
-          child: ColoredBox(
-            color: color,
-            child: SizedBox(
-                width: 30, height: 30, child: Center(child: Text(text))),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+            constraints: BoxConstraints(minWidth: 50.w),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+              color: index == _lastIndex ? color : null,
+            ),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+            ),
           ),
         ));
   }
@@ -196,8 +220,6 @@ class _Content extends StatelessWidget {
       return Material(
         elevation: 18.0,
         shadowColor: Colors.grey,
-        color: Colors.transparent,
-        borderRadius: BorderRadius.zero,
         child: Card(child: child),
       );
     };
@@ -206,21 +228,57 @@ class _Content extends StatelessWidget {
         builder: (context, value, child) {
           return value
               ? Container(
-                  color: Colors.red,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withAlpha(128),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                  ),
                   width: double.infinity,
-                  height: 50,
                   child: SortableWrap(
                     key: Key(Random().nextDouble().toString()),
                     onSorted: (int oldIndex, int newIndex) {},
                     spacing: 10,
                     runSpacing: 15,
                     options: options,
-                    children: [Text('data1'), Text('data2'), Text('data3')],
-                    onSortStart: (index) {},
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(5.sp),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Text('data1'),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5.sp),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Text('data2'),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5.sp),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Text('data3'),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5.sp),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Text('data4'),
+                      ),
+                    ],
+                    onSortStart: (index) {
+                      print(index);
+                    },
                   ),
                 )
               : const SizedBox(
-                  width: 0.0000000001,
+                  width: 0.1,
+                  height: 0.1,
                 );
         });
   }
@@ -274,5 +332,46 @@ class _ModuleState extends State<_Module> {
         });
       },
     );
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  final ValueListenable<bool> valueListenable;
+
+  const _AddButton({required this.valueListenable});
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+        valueListenable: valueListenable,
+        builder: (context, value, child) {
+          return value
+              ? GestureDetector(
+                  onLongPress: () {
+                    print('object');
+                  },
+                  onTap: () {
+                    print('objectsss');
+                  },
+                  onVerticalDragStart: (details) {
+                    print('22222222');
+                  },
+                  onHorizontalDragStart: (details) {
+                    print('3333333333');
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 0.w, vertical: 0.h),
+                    constraints: BoxConstraints(minWidth: 50.w),
+                    // decoration: BoxDecoration(
+                    //   border: Border.all(color: Colors.grey),
+                    //   borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                    // ),
+                    child: Icon(Icons.add_circle_outline_outlined),
+                  ))
+              : SizedBox(
+                  width: 0.1,
+                  height: 0.1,
+                );
+        });
   }
 }
