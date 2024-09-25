@@ -4,23 +4,26 @@
 /// created at 2019-10-21
 //
 
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 
 enum BubbleArrowDirection { top, bottom, right, left, topLeft }
 
+// ignore: must_be_immutable
 class BubbleWidget extends StatelessWidget {
   // 尖角位置
   final BubbleArrowDirection position;
 
   // 尖角高度
-  var  arrHeight;
+  double  arrHeight;
 
   // 尖角角度
-  var arrAngle;
+  double arrAngle;
 
   // 圆角半径
-  var radius;
+  double radius;
 
   // 宽度
   final double width;
@@ -38,16 +41,16 @@ class BubbleWidget extends StatelessWidget {
   Color borderColor;
 
   // 边框宽度
-  final strokeWidth;
+  double strokeWidth;
 
   // 填充样式
-  final style;
+  PaintingStyle style;
 
   // 子 Widget
-  final child;
+  final Widget? child;
 
   // 子 Widget 与起泡间距
-  var innerPadding;
+  double innerPadding;
 
   BubbleWidget(
     this.width,
@@ -67,7 +70,7 @@ class BubbleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (style == PaintingStyle.stroke && borderColor == null) {
+    if (style == PaintingStyle.stroke) {
       borderColor = color;
     }
     if (arrAngle < 0.0 || arrAngle >= 180.0) {
@@ -97,7 +100,7 @@ class BubbleWidget extends StatelessWidget {
     }
     Widget bubbleWidget;
     if (style == PaintingStyle.fill) {
-      bubbleWidget = Container(
+      bubbleWidget = SizedBox(
           width: width,
           height: height,
           child: Stack(children: <Widget>[
@@ -107,7 +110,7 @@ class BubbleWidget extends StatelessWidget {
             _paddingWidget()
           ]));
     } else {
-      bubbleWidget = Container(
+      bubbleWidget = SizedBox(
           width: width,
           height: height,
           child: Stack(children: <Widget>[
@@ -158,7 +161,7 @@ class BubbleWidget extends StatelessWidget {
             left: (position == BubbleArrowDirection.left)
                 ? arrHeight + innerPadding
                 : innerPadding),
-        child: Center(child: this.child));
+        child: Center(child: child));
   }
 }
 

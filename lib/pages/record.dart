@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class Record extends StatefulWidget {
-  Record({Key? key}) : super(key: key);
+  const Record({Key? key}) : super(key: key);
 
   @override
   State<Record> createState() => _RecordState();
@@ -38,8 +38,8 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
         foregroundColor: HexColor('#000000'),
         elevation: 1,
         leading: Container(
-          margin: EdgeInsets.only(left: 16),
-          child: Row(
+          margin: const EdgeInsets.only(left: 16),
+          child: const Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('日常账本'),
@@ -77,9 +77,9 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
               Navigator.pop(context);
             }),
             child: Container(
-              margin: EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(right: 16),
               alignment: Alignment.center,
-              child: Text('取消'),
+              child: const Text('取消'),
             ),
           ),
         ],
@@ -98,7 +98,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
               );
             }),
           ),
-          Center(
+          const Center(
             child: Text('2'),
           ),
         ],

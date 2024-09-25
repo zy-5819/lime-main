@@ -1,7 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart';
@@ -10,23 +11,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+//import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 import 'package:lime/pages/individual.dart';
-import 'package:lime/pages/qipao.dart';
-import 'package:lime/pages/test2.dart';
-import 'package:lottie/lottie.dart';
+//import 'package:lime/pages/qipao.dart';
+import 'package:lime/pages/tabs.dart';
+//import 'package:lime/pages/test2.dart';
+//import 'package:lottie/lottie.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shape_of_view_null_safe/shape_of_view_null_safe.dart';
+//import 'package:shape_of_view_null_safe/shape_of_view_null_safe.dart';
 import 'package:vibration/vibration.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class VoiceCommandButton extends StatefulWidget {
-  const VoiceCommandButton();
+  const VoiceCommandButton({super.key});
   @override
   State<StatefulWidget> createState() => _VoiceCommandButtonState();
 }
@@ -66,71 +67,97 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
   Future<void> _showResponse() async {
     _response = OverlayEntry(builder: (context) {
       return Positioned(
-          bottom: 0.2.sh,
-          child: Material(
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              width: 1.sw,
-              height: 0.7.sh,
-              child: ListView(
-                children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: ClipOval(
-                      child: InkWell(
-                        onTap: () {
-                          print(_response == null);
-                          _response?.remove();
-                          _response?.dispose();
-                          _response = null;
-                        },
+        top: 0.1.sh,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            width: 1.sw,
+            height: 0.7.sh,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          offset: const Offset(1, 1), //阴影xy轴偏移量
+                          blurRadius: 2, //阴影模糊程度
+                          spreadRadius: 3 //阴影扩散程度
+                          )
+                    ],
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.blue.withAlpha(100),
+                        HexColor('#54C395').withAlpha(100),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  child: ListView(
+                    children: [
+                      ChatBubble(
+                        clipper:
+                            ChatBubbleClipper4(type: BubbleType.sendBubble),
+                        alignment: Alignment.topRight,
+                        margin: const EdgeInsets.only(top: 20),
+                        backGroundColor: HexColor('#54C395'),
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primary),
-                          child: Icon(
-                            Icons.close,
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
+                          constraints: BoxConstraints(
+                            maxWidth: 0.5.sw,
                           ),
+                          child: Text(
+                            _questionText,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      ChatBubble(
+                        clipper:
+                            ChatBubbleClipper4(type: BubbleType.receiverBubble),
+                        backGroundColor: const Color(0xffE7E7ED),
+                        margin: const EdgeInsets.only(top: 20),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            maxWidth: 0.4.sw,
+                          ),
+                          child: Text(
+                            _questionText.toString(),
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: ClipOval(
+                    child: InkWell(
+                      onTap: () {
+                        _response?.remove();
+                        _response?.dispose();
+                        _response = null;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary),
+                        child: Icon(
+                          Icons.close,
+                          color: Theme.of(context).colorScheme.primaryContainer,
                         ),
                       ),
                     ),
                   ),
-                  ChatBubble(
-                    clipper: ChatBubbleClipper4(type: BubbleType.sendBubble),
-                    alignment: Alignment.topRight,
-                    margin: EdgeInsets.only(top: 20),
-                    backGroundColor: HexColor('#54C395'),
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: 0.5.sw,
-                      ),
-                      child: Text(
-                        _questionText,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  ChatBubble(
-                    clipper:
-                        ChatBubbleClipper4(type: BubbleType.receiverBubble),
-                    backGroundColor: Color(0xffE7E7ED),
-                    margin: EdgeInsets.only(top: 20),
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxWidth: 0.4.sw,
-                      ),
-                      child: Text(
-                        _questionText.toString(),
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
     });
 
     Overlay.of(context).insert(_response!);
@@ -235,20 +262,20 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
       onLongPressMoveUpdate: _onLongPressMoveUpdate,
       child: Container(
           height: 50,
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           width: double.infinity,
           decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
                     color: Colors.grey.withOpacity(0.7),
-                    offset: Offset(1, 1.0), //阴影xy轴偏移量
+                    offset: const Offset(1, 1.0), //阴影xy轴偏移量
                     blurRadius: 2, //阴影模糊程度
                     spreadRadius: 0.5 //阴影扩散程度
                     )
               ],
-              borderRadius: BorderRadius.all(Radius.circular(30)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
               border: Border.all(color: Colors.grey.withAlpha(122))),
           child: Row(
             children: [
@@ -270,10 +297,10 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
                     });
                   },
                   child: isSound
-                      ? Icon(
+                      ? const Icon(
                           Icons.contactless_outlined,
                         )
-                      : Icon(Icons.keyboard_alt_outlined)),
+                      : const Icon(Icons.keyboard_alt_outlined)),
             ],
           )),
     );
@@ -304,13 +331,17 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
         widget.onRecordCancel?.call();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 
   /// 长按打开录音界面
   Future<void> _onLongPress() async {
-    print('on long press.');
+    if (kDebugMode) {
+      print('on long press.');
+    }
     try {
       try {
         unawaited(_hapticFeedback());
@@ -326,7 +357,9 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
       Overlay.of(context).insert(entry!);
       await _record();
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       await _recorder.stopRecorder();
     }
   }
@@ -345,7 +378,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
         "is_speaking": true,
         "chunk_interval": 10,
         "itn": true,
-        "hotwords": '{\"阿里巴巴\":20,\"hello world\":40}'
+        "hotwords": '{"阿里巴巴":20,"hello world":40}'
       };
       print(jsonEncode(request));
       channel?.sink.add(jsonEncode(request));
@@ -365,7 +398,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
   void getJsonMessage(dynamic jsonMsg) {
     String rectxt = "${jsonMsg['text']}";
     var asrmodel = jsonMsg['stamp_sents'];
-    bool is_final = jsonMsg['is_final'];
+    //bool is_final = jsonMsg['is_final'];
     if (asrmodel != null) {
       text = text + rectxt;
       _textController.value = text;
@@ -396,10 +429,10 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
       );
 
       _recorder.onProgress!.listen((e) {
-        var date = DateTime.fromMillisecondsSinceEpoch(
-            e.duration.inMilliseconds,
-            isUtc: true);
-        var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
+        // var date = DateTime.fromMillisecondsSinceEpoch(
+        //     e.duration.inMilliseconds,
+        //     isUtc: true);
+        // var txt = DateFormat('mm:ss:SS', 'en_GB').format(date);
         dbLevel.value = e.decibels;
       });
     } on Exception catch (err) {
@@ -408,11 +441,11 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
   }
 
   void _onLongPressMoveUpdate(LongPressMoveUpdateDetails details) {
-    if (_voiceController.value && details.globalPosition.dy < 0.88.sh) {
+    if (_voiceController.value && details.globalPosition.dy < 0.84.sh) {
       unawaited(_hapticFeedback());
       _voiceController.value = false;
     }
-    if (!_voiceController.value && details.globalPosition.dy >= 0.88.sh) {
+    if (!_voiceController.value && details.globalPosition.dy >= 0.84.sh) {
       unawaited(_hapticFeedback());
       _voiceController.value = true;
     }
@@ -464,7 +497,7 @@ class __OverlayVoiceRecorderState extends State<_OverlayVoiceRecorder> {
           child: Stack(
             children: [
               Positioned(
-                top: 0.75.sh,
+                top: 0.68.sh,
                 left: 0.5.sw,
                 child: _BottomView(value, widget._textController),
               ),
@@ -483,8 +516,6 @@ class _BottomView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("adsadsfasdf");
-    var size = MediaQuery.of(context).size;
     return Material(
       color: Colors.transparent,
       child: FractionalTranslation(
@@ -500,45 +531,47 @@ class _BottomView extends StatelessWidget {
             },
             blendMode: BlendMode.darken,
             child: Container(
-              padding: EdgeInsets.only(bottom: 0.1.sh, top: 0.03.sh),
+              padding: EdgeInsets.only(
+                  bottom:
+                      (barKey.currentContext?.findRenderObject() as RenderBox)
+                          .size
+                          .height,
+                  top: 0.03.sh),
               alignment: Alignment.topCenter,
               width: 2.2.sw,
-              height: 2.2.sw,
+              height: 1.sh,
               decoration: BoxDecoration(color: HexColor('#54C395')),
-              child: Column(
+              child: Stack(
+                alignment: Alignment.topCenter,
                 children: [
-                  SizedBox(
-                    width: 0.7.sw,
-                    height: 0.1.sh,
-                    child: ValueListenableBuilder<String>(
-                        valueListenable: _textController,
-                        builder: (context, value, child) {
-                          return Text(
-                            value.isEmpty ? '我在听' : value,
-                            maxLines: 3,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer),
-                          );
-                        }),
+                  Positioned(
+                    top: 0,
+                    child: SizedBox(
+                      width: 0.7.sw,
+                      height: 0.1.sh,
+                      child: ValueListenableBuilder<String>(
+                          valueListenable: _textController,
+                          builder: (context, value, child) {
+                            return Text(
+                              value.isEmpty ? '我在听' : value,
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer),
+                            );
+                          }),
+                    ),
                   ),
-                  Text(
-                    _isEnabled ? '松开发送,上滑取消' : '松开，取消发送',
-                    style: TextStyle(
-                        color: _isEnabled
-                            ? Theme.of(context).colorScheme.secondaryContainer
-                            : Colors.red),
-                  ),
-                  SizedBox(
-                    height: 0.01.sh,
-                  ),
-                  RecodingButton(
-                    isEnabled: _isEnabled,
+                  Positioned(
+                    bottom: 0.68.sh,
+                    child: RecodingButton(
+                      isEnabled: _isEnabled,
+                    ),
                   )
                 ],
               ),
@@ -571,26 +604,38 @@ class _RecodingButtonState extends State<RecodingButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 50.h,
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        width: 1.sw - 40,
-        decoration: BoxDecoration(
-            color: widget.isEnabled ? Colors.white : Colors.red,
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            border: Border.all(color: Colors.grey.withAlpha(122))),
-        child: ValueListenableBuilder<double?>(
-            valueListenable: dbLevel,
-            builder: (context, value, builder) {
-              if (_sounds.length > num) {
-                _sounds.removeAt(0);
-              }
-              _sounds.add(value!);
-              return CustomPaint(
-                painter:
-                    CustomSoundSizeAnim(widget.isEnabled, soundList: _sounds),
-              );
-            }));
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          widget.isEnabled ? '松开发送,上滑取消' : '松开，取消发送',
+          style: TextStyle(
+              color: widget.isEnabled
+                  ? Theme.of(context).colorScheme.secondaryContainer
+                  : Colors.red),
+        ),
+        Container(
+            height: 50.h,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            width: 1.sw - 40,
+            decoration: BoxDecoration(
+                color: widget.isEnabled ? Colors.white : Colors.red,
+                borderRadius: const BorderRadius.all(Radius.circular(30)),
+                border: Border.all(color: Colors.grey.withAlpha(122))),
+            child: ValueListenableBuilder<double?>(
+                valueListenable: dbLevel,
+                builder: (context, value, builder) {
+                  if (_sounds.length > num) {
+                    _sounds.removeAt(0);
+                  }
+                  _sounds.add(value!);
+                  return CustomPaint(
+                    painter: CustomSoundSizeAnim(widget.isEnabled,
+                        soundList: _sounds),
+                  );
+                })),
+      ],
+    );
   }
 }
 
@@ -637,7 +682,7 @@ class CustomSoundSizeAnim extends CustomPainter {
               Rect.fromCenter(
                   center: Offset(size.width / 2 + i * 8, size.height / 2),
                   width: 4,
-                  height: soundList![i] / 3),
+                  height: soundList[i] / 3),
               8,
               8),
           _paint!);

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'nested_tabbar.dart';
 
 class Chart extends StatefulWidget {
-  Chart({Key? key}) : super(key: key);
+  const Chart({Key? key}) : super(key: key);
   @override
   State<Chart> createState() => _ChartState();
 }
@@ -48,7 +48,7 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             indicatorColor: HexColor('#54C395'),
             onTap: (index) => {
-              setState(() => {_fontSizeFlage = !_fontSizeFlage})
+              setState(() {_fontSizeFlage = !_fontSizeFlage;})
             },
             tabs: [
               Text(
@@ -72,7 +72,7 @@ class _ChartState extends State<Chart> with TickerProviderStateMixin {
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: [
+        children: const [
           NestedTabbar(),
           Center(
             child: Text("It's rainy here"),

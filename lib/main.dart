@@ -20,8 +20,8 @@ class Main extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Colors.greenAccent,
-          highlightColor: Color.fromRGBO(0, 0, 0, 0),
-          splashColor: Color.fromRGBO(0, 0, 0, 0),
+          highlightColor: const Color.fromRGBO(0, 0, 0, 0),
+          splashColor: const Color.fromRGBO(0, 0, 0, 0),
         ),
       ),
     );

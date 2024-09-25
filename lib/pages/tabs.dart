@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lime/pages/book.dart';
@@ -8,16 +6,10 @@ import 'package:lime/pages/dtail.dart';
 import 'package:lime/pages/individual.dart';
 import 'package:lime/pages/record.dart';
 
-class BottomAppBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
+final GlobalKey barKey = GlobalKey();
 
 class Tabs extends StatefulWidget {
-  Tabs({Key? key}) : super(key: key);
+  const Tabs({Key? key}) : super(key: key);
 
   @override
   State<Tabs> createState() => _TabsState();
@@ -26,8 +18,8 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> {
   int _currentIndex = 1;
 
-  List navigationBarItem = [
-    Dtail(),
+  List navigationBarItem =const [
+     Dtail(),
     Chart(),
     Record(),
     Book(),
@@ -39,6 +31,7 @@ class _TabsState extends State<Tabs> {
     return Scaffold(
         body: navigationBarItem[_currentIndex],
         bottomNavigationBar: ButtomBar(
+          key: barKey,
           onTap: (v) {
             setState(() {
               _currentIndex = v;
@@ -130,36 +123,53 @@ class ButtomBar extends StatefulWidget {
 
 class _ButtomBarState extends State<ButtomBar> {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.pink.withAlpha(0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _Item(
-            index: 1,
-            selected: false,
-            data: Icons.article,
-          ),
-          _Item(
-            index: 2,
-            selected: false,
-            data: Icons.addchart,
-          ),
-          _Item(
-            index: 3,
-            selected: false,
-            data: Icons.auto_stories,
-          ),
-          _Item(
-            index: 4,
-            selected: false,
-            data: Icons.person,
-          ),
+  void initState() {
+    super.initState();
+  }
 
-          // 添加更多 IconButton
-        ],
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _Item(
+          text: '明细',
+          index: 0,
+          selected: widget.currentIndex == 0,
+          data: Icons.article,
+          onTap: widget.onTap,
+        ),
+        _Item(
+          text: '报表',
+          index: 1,
+          selected: widget.currentIndex == 1,
+          data: Icons.addchart,
+          onTap: widget.onTap,
+        ),
+        _Item(
+          index: 2,
+          selected: widget.currentIndex == 2,
+          data: Icons.add_box_rounded,
+          onTap: widget.onTap,
+          isAdd: true,
+        ),
+        _Item(
+          text: '账本',
+          index: 3,
+          selected: widget.currentIndex == 3,
+          data: Icons.auto_stories,
+          onTap: widget.onTap,
+        ),
+        _Item(
+          text: '我的',
+          index: 4,
+          selected: widget.currentIndex == 4,
+          data: Icons.person,
+          onTap: widget.onTap,
+        ),
+    
+        // 添加更多 IconButton
+      ],
     );
   }
 }
@@ -170,24 +180,45 @@ class _Item extends StatelessWidget {
   final void Function(int)? onTap;
   final IconData data;
   final String? text;
+  final bool isAdd;
 
   const _Item(
-      {super.key,
-      required this.index,
+      {required this.index,
       required this.selected,
       this.onTap,
       required this.data,
-      this.text});
+      this.text,
+      this.isAdd = false});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         onTap?.call(index);
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Icon(data), text != null ? Text('data') : SizedBox.shrink()],
-      ),
+      child: isAdd
+          ? Icon(
+              data,
+              size: selected ? 55 : 50,
+              color: HexColor('#54C395'),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  data,
+                  size: selected ? 25 : 20,
+                  color: selected ? HexColor('#54C395') : Colors.grey,
+                ),
+                text != null
+                    ? Text(
+                        text!,
+                        style: TextStyle(
+                            color: selected ? HexColor('#54C395') : Colors.grey,
+                            fontSize: selected ? 16 : 14),
+                      )
+                    : const SizedBox.shrink()
+              ],
+            ),
     );
   }
 }
