@@ -345,8 +345,8 @@ class Item extends StatelessWidget {
                         ),
                       ),
                       child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 5.h),
+                        margin:
+                            EdgeInsets.only(left: 10.w, top: 5.h, bottom: 5.h),
                         padding: EdgeInsets.symmetric(
                             horizontal: 10.w, vertical: 5.h),
                         constraints: BoxConstraints(minWidth: 50.w),

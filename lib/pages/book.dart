@@ -30,103 +30,167 @@ numberKeypan({
       '0',
       '.'
     ];
-    return AnimatedContainer(
-      curve: const Cubic(0.160, 0.265, 0.125, 0.995),
-      duration: const Duration(milliseconds: 360),
-      child: Positioned(
-          bottom: 0,
-          child: Material(
+    return Positioned(
+        bottom: 0,
+        child: Material(
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
-              color: Colors.grey[200],
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      children: List.generate(list.length, (index) {
-                        return Material(
-                          color: Colors.white,
-                          child: Ink(
-                            color: Colors.white,
-                            child: InkWell(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.grey, width: 0.25),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                  height: 50,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: '请输入药品拼音首字母',
+                            ),
+                            focusNode: null,
+                            showCursor: true,
+                            readOnly: true,
+                            onTap: () {
+                              numberKeypan(context: context);
+                            },
+                            onSubmitted: (value) {},
+                            onChanged: (value) {},
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        child: Container(
+                            width: 60,
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.mic, color: Color(0xFF6D7380)),
+                              ],
+                            )),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        width: 1,
+                        height: 40,
+                      ),
+                      GestureDetector(
+                        child: Container(
+                            width: 60,
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.keyboard_hide_sharp,
+                                    color: Color(0xFF6D7380)),
+                              ],
+                            )),
+                      )
+                    ],
+                  )),
+              AnimatedContainer(
+                curve: const Cubic(0.160, 0.265, 0.125, 0.995),
+                duration: const Duration(milliseconds: 360),
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    alignment: Alignment.center,
+                    color: Colors.grey[200],
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceBetween,
+                            children: List.generate(list.length, (index) {
+                              return Material(
+                                color: Colors.white,
+                                child: Ink(
+                                  color: Colors.white,
+                                  child: InkWell(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.grey, width: 0.25),
+                                      ),
+                                      alignment: Alignment.center,
+                                      height: 50,
+                                      width:
+                                          (MediaQuery.of(context).size.width -
+                                                  60) /
+                                              3,
+                                      child: Text(
+                                        list[index],
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      if (list[index] != "") {
+                                        //onTap(list[index]);
+                                      }
+                                    },
+                                  ),
                                 ),
-                                alignment: Alignment.center,
-                                height: 50,
-                                width:
-                                    (MediaQuery.of(context).size.width - 60) /
-                                        3,
-                                child: Text(
-                                  list[index],
-                                  style: const TextStyle(
-                                      fontSize: 18,
+                              );
+                            }),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 50 * 1.5,
+                              child: MaterialButton(
+                                onPressed: () {
+                                  if (onDel != null) {
+                                    onDel();
+                                  }
+                                },
+                                color: Colors.grey[100],
+                                elevation: 0,
+                                padding: const EdgeInsets.all(0),
+                                child: const Text("删除",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 60,
+                              height: 50 * 2.5,
+                              child: MaterialButton(
+                                onPressed: () {
+                                  // disKeypan();
+                                  if (onCommit != null) {
+                                    onCommit();
+                                  }
+                                },
+                                color: Colors.blue,
+                                elevation: 0,
+                                padding: const EdgeInsets.all(0),
+                                child: const Text(
+                                  "回车",
+                                  style: TextStyle(
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              onTap: () {
-                                if (list[index] != "") {
-                                  //onTap(list[index]);
-                                }
-                              },
                             ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: 60,
-                        height: 50 * 1.5,
-                        child: MaterialButton(
-                          onPressed: () {
-                            if (onDel != null) {
-                              onDel();
-                            }
-                          },
-                          color: Colors.grey[100],
-                          elevation: 0,
-                          padding: const EdgeInsets.all(0),
-                          child: const Text("删除",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 60,
-                        height: 50 * 2.5,
-                        child: MaterialButton(
-                          onPressed: () {
-                            // disKeypan();
-                            if (onCommit != null) {
-                              onCommit();
-                            }
-                          },
-                          color: Colors.blue,
-                          elevation: 0,
-                          padding: const EdgeInsets.all(0),
-                          child: const Text(
-                            "回车",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )),
-    );
+                      ],
+                    )),
+              )
+            ],
+          ),
+        )));
   });
   openKeypan(context: context);
 }
@@ -190,77 +254,13 @@ class Book extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const App();
-//     Column(
-//       children: [
-//             Container(
-//         height: 50,
-//         color: Colors.white,
-//         child: Row(
-//           children: [
-//             Expanded(
-//               child: Padding(
-//                 padding: const EdgeInsets.all(0),
-//                 child: TextField(
-//                   decoration: InputDecoration(
-//                     hintText: '请输入药品拼音首字母',
-//                   ),
-//                   focusNode: null,
-//                   showCursor: true,
-//                   readOnly: true,
-//                   onTap: () {
-//                     numberKeypan(context: context);
-//                   },
-//                   onSubmitted: (value) {},
-//                   onChanged: (value) {},
-//                 ),
-//               ),
-//             ),
-//             Container(
-//               //color: WMColor.divider,
-//               width: 0.5,
-//               height: 40,
-//             ),
-//             GestureDetector(
-//               child: Container(
-//                   width: 60,
-//                   height: 50,
-//                   alignment: Alignment.center,
-//                   // color: Colors.red,
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Icon(Icons.keyboard_sharp, color: Color(0xFF6D7380)),
-//                       IconButton(
-//                         icon: Icon(
-//                           Icons.keyboard_arrow_down,
-//                         ),
-//                         onPressed: () {},
-//                       ),
-//                     ],
-//                   )),
-//             )
-//           ],
-//         )),
-//         Container(
-//       child: AnimatedContainer(
-//         curve: Cubic(0.160, 0.265, 0.125, 0.995),
-//         duration: Duration(milliseconds: 360),
-//         height:
-//                  250,
-
-//         child: Container(
-//           // height: keyBoardType == 1 ? 250 : 380,
-//           alignment: Alignment.topCenter,
-//           child: Column(
-//             children: [
-
-//             ],
-//           ),
-//         ),
-//       ),
-//     )
-// ],
-//     );
+    return
+        // const App();
+        Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        numberKeypan(context: context);
+      }),
+      body: const Text('data'),
+    );
   }
 }
