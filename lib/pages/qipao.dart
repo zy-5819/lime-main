@@ -1,318 +1,231 @@
-/// 气泡组件封装
-///
-/// created by hujintao
-/// created at 2019-10-21
-//
+import 'dart:io';
 
-// ignore_for_file: prefer_typing_uninitialized_variables
-
-import 'dart:math';
+import 'package:bubble_box/bubble_box.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-enum BubbleArrowDirection { top, bottom, right, left, topLeft }
-
-// ignore: must_be_immutable
-class BubbleWidget extends StatelessWidget {
-  // 尖角位置
-  final BubbleArrowDirection position;
-
-  // 尖角高度
-  double  arrHeight;
-
-  // 尖角角度
-  double arrAngle;
-
-  // 圆角半径
-  double radius;
-
-  // 宽度
-  final double width;
-
-  // 高度
-  final double height;
-
-  // 边距
-  double length;
-
-  // 颜色
-  Color color;
-
-  // 边框颜色
-  Color borderColor;
-
-  // 边框宽度
-  double strokeWidth;
-
-  // 填充样式
-  PaintingStyle style;
-
-  // 子 Widget
-  final Widget? child;
-
-  // 子 Widget 与起泡间距
-  double innerPadding;
-
-  BubbleWidget(
-    this.width,
-    this.height,
-    this.color,
-    this.position, {super.key, 
-    this.length = 1,
-    this.arrHeight = 12.0,
-    this.arrAngle = 60.0,
-    this.radius = 10.0,
-    this.strokeWidth = 4.0,
-    this.style = PaintingStyle.fill,
-    required this.borderColor,
-    this.child,
-    this.innerPadding = 6.0,
-  }) ;
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (style == PaintingStyle.stroke) {
-      borderColor = color;
-    }
-    if (arrAngle < 0.0 || arrAngle >= 180.0) {
-      arrAngle = 60.0;
-    }
-    if (arrHeight < 0.0) {
-      arrHeight = 0.0;
-    }
-    if (radius < 0.0 || radius > width * 0.5 || radius > height * 0.5) {
-      radius = 0.0;
-    }
-    if (position == BubbleArrowDirection.top ||
-        position == BubbleArrowDirection.bottom) {
-      if (length < 0.0 || length >= width - 2 * radius) {
-        length = width * 0.5 - arrHeight * tan(_angle(arrAngle * 0.5)) - radius;
-      }
-    } else {
-      if (length < 0.0 || length >= height - 2 * radius) {
-        length =
-            height * 0.5 - arrHeight * tan(_angle(arrAngle * 0.5)) - radius;
-      }
-    }
-    if (innerPadding < 0.0 ||
-        innerPadding >= width * 0.5 ||
-        innerPadding >= height * 0.5) {
-      innerPadding = 2.0;
-    }
-    Widget bubbleWidget;
-    if (style == PaintingStyle.fill) {
-      bubbleWidget = SizedBox(
-          width: width,
-          height: height,
-          child: Stack(children: <Widget>[
-            CustomPaint(
-                painter: BubbleCanvas(context, width, height, color, position,
-                    arrHeight, arrAngle, radius, strokeWidth, style, length)),
-            _paddingWidget()
-          ]));
-    } else {
-      bubbleWidget = SizedBox(
-          width: width,
-          height: height,
-          child: Stack(children: <Widget>[
-            CustomPaint(
-                painter: BubbleCanvas(
-                    context,
-                    width,
-                    height,
-                    color,
-                    position,
-                    arrHeight,
-                    arrAngle,
-                    radius,
-                    strokeWidth,
-                    PaintingStyle.fill,
-                    length)),
-            CustomPaint(
-                painter: BubbleCanvas(
-                    context,
-                    width,
-                    height,
-                    borderColor,
-                    position,
-                    arrHeight,
-                    arrAngle,
-                    radius,
-                    strokeWidth,
-                    style,
-                    length)),
-            _paddingWidget()
-          ]));
-    }
-    return bubbleWidget;
-  }
-
-  Widget _paddingWidget() {
-    return Padding(
-        padding: EdgeInsets.only(
-            top: (position == BubbleArrowDirection.top)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            right: (position == BubbleArrowDirection.right)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            bottom: (position == BubbleArrowDirection.bottom)
-                ? arrHeight + innerPadding
-                : innerPadding,
-            left: (position == BubbleArrowDirection.left)
-                ? arrHeight + innerPadding
-                : innerPadding),
-        child: Center(child: child));
+    return MaterialApp(
+      title: 'bubble_box demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const BubbleBoxDemo(),
+    );
   }
 }
 
-class BubbleCanvas extends CustomPainter {
-  BuildContext context;
-  final position;
-  final arrHeight;
-  final arrAngle;
-  final radius;
-  final width;
-  final height;
-  final length;
-  final color;
-  final strokeWidth;
-  final style;
-
-  BubbleCanvas(
-      this.context,
-      this.width,
-      this.height,
-      this.color,
-      this.position,
-      this.arrHeight,
-      this.arrAngle,
-      this.radius,
-      this.strokeWidth,
-      this.style,
-      this.length);
+class BubbleBoxDemo extends StatelessWidget {
+  const BubbleBoxDemo({Key? key}) : super(key: key);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    Path path = Path();
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.left)
-                    ? radius + arrHeight
-                    : radius,
-                (position == BubbleArrowDirection.top)
-                    ? radius + arrHeight
-                    : radius),
-            radius: radius),
-        pi,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.top) {
-      path.lineTo(length + radius, arrHeight);
-      path.lineTo(
-          length + radius + arrHeight * tan(_angle(arrAngle * 0.5)), 0.0);
-      path.lineTo(length + radius + arrHeight * tan(_angle(arrAngle * 0.5)) * 2,
-          arrHeight);
-    }
-    path.lineTo(
-        (position == BubbleArrowDirection.right)
-            ? width - radius - arrHeight
-            : width - radius,
-        (position == BubbleArrowDirection.top) ? arrHeight : 0.0);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.right)
-                    ? width - radius - arrHeight
-                    : width - radius,
-                (position == BubbleArrowDirection.top)
-                    ? radius + arrHeight
-                    : radius),
-            radius: radius),
-        -pi * 0.5,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.right) {
-      path.lineTo(width - arrHeight, length + radius);
-      path.lineTo(
-          width, length + radius + arrHeight * tan(_angle(arrAngle * 0.5)));
-      path.lineTo(width - arrHeight,
-          length + radius + arrHeight * tan(_angle(arrAngle * 0.5)) * 2);
-    }
-    path.lineTo(
-        (position == BubbleArrowDirection.right) ? width - arrHeight : width,
-        (position == BubbleArrowDirection.bottom)
-            ? height - radius - arrHeight
-            : height - radius);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.right)
-                    ? width - radius - arrHeight
-                    : width - radius,
-                (position == BubbleArrowDirection.bottom)
-                    ? height - radius - arrHeight
-                    : height - radius),
-            radius: radius),
-        pi * 0,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.bottom) {
-      path.lineTo(width - radius - length, height - arrHeight);
-      path.lineTo(
-          width - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)),
-          height);
-      path.lineTo(
-          width - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)) * 2,
-          height - arrHeight);
-    }
-    path.lineTo(
-        (position == BubbleArrowDirection.left) ? radius + arrHeight : radius,
-        (position == BubbleArrowDirection.bottom)
-            ? height - arrHeight
-            : height);
-    path.arcTo(
-        Rect.fromCircle(
-            center: Offset(
-                (position == BubbleArrowDirection.left)
-                    ? radius + arrHeight
-                    : radius,
-                (position == BubbleArrowDirection.bottom)
-                    ? height - radius - arrHeight
-                    : height - radius),
-            radius: radius),
-        pi * 0.5,
-        pi * 0.5,
-        false);
-    if (position == BubbleArrowDirection.left) {
-      path.lineTo(arrHeight, height - radius - length);
-      path.lineTo(0.0,
-          height - radius - length - arrHeight * tan(_angle(arrAngle * 0.5)));
-      path.lineTo(
-          arrHeight,
-          height -
-              radius -
-              length -
-              arrHeight * tan(_angle(arrAngle * 0.5)) * 2);
-    }
-    path.lineTo((position == BubbleArrowDirection.left) ? arrHeight : 0.0,
-        (position == BubbleArrowDirection.top) ? radius + arrHeight : radius);
-    path.close();
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = color
-          ..style = style
-          ..strokeCap = StrokeCap.round
-          ..strokeWidth = strokeWidth);
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xffF5F5F5),
+      appBar: AppBar(
+        toolbarHeight: 40,
+        backgroundColor: const Color(0xffF5F5F5),
+        elevation: 0,
+        centerTitle: true,
+        shape: const BorderDirectional(bottom: BorderSide(width: 0.1)),
+        title: const Text(
+          '演示',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: ListView(children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.8,
+              child: const Text('我是一个基础的组件应用示例'),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.8,
+              shape: BubbleShapeBorder(
+                  border: BubbleBoxBorder(
+                    color: Colors.blue,
+                    width: 3,
+                  ),
+                  position: const BubblePosition.center(0),
+                  direction: BubbleDirection.bottom),
+              backgroundColor: Colors.green.withOpacity(0.8),
+              child: const Text('我可以自定义边框颜色、宽度，组件的背景色，气泡的尖角位置及尖角的偏移'),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.8,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.pink,
+                  Colors.orange[700]!,
+                ],
+              ),
+              blendMode: BlendMode.srcATop,
+              shape: BubbleShapeBorder(
+                border: BubbleBoxBorder(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.pink,
+                      Colors.orange[700]!,
+                    ],
+                  ),
+                  width: 3,
+                  style: BubbleBoxBorderStyle.dashed,
+                ),
+                direction: BubbleDirection.left,
+                position: const BubblePosition.start(12),
+              ),
+              margin: const EdgeInsets.all(4),
+              elevation: 5,
+              shadowColor: Colors.redAccent,
+              child: const Text(
+                  '然而我不仅仅可以自定气泡的边框和尖角。我还可以定义边框为虚线、边框颜色渐变。\n我对内容是自适应的，不需要设置宽高，当然，你可以限制组件的最大宽高。\n我的内容也可以渐变色。\n此外，你可能需要一些阴影,阴影可能也需要一些自己的颜色。'),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              elevation: 5,
+              gradient: LinearGradient(colors: [
+                Colors.red,
+                Colors.orange[700]!,
+                Colors.orange[500]!,
+              ]),
+              shape: BubbleShapeBorder(
+                border: BubbleBoxBorder(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.pink,
+                      Colors.orange[700]!,
+                    ],
+                  ),
+                  width: 3,
+                  style: BubbleBoxBorderStyle.dashed,
+                ),
+                direction: BubbleDirection.none,
+                position: const BubblePosition.start(12),
+              ),
+              margin: const EdgeInsets.all(4),
+              child: const Text(
+                '我的背景其实也能够渐变',
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              elevation: 5,
+              gradient: LinearGradient(colors: [
+                Colors.red,
+                Colors.orange[700]!,
+                Colors.orange[500]!,
+              ]),
+              shape: BubbleShapeBorder(
+                direction: BubbleDirection.left,
+                position: const BubblePosition.center(0),
+              ),
+              margin: const EdgeInsets.all(4),
+              child: const Text(
+                '然而你更常用的可能是它',
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              shape: BubbleShapeBorder(
+                border: BubbleBoxBorder(color: const Color(0xffEDEDED)),
+                direction: BubbleDirection.left,
+                position: const BubblePosition.start(12),
+                arrowQuadraticBezierLength: 1,
+              ),
+              margin: const EdgeInsets.all(4),
+              child: const Text(
+                '然而对于微信，你可能更熟悉它',
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              shape: BubbleShapeBorder(
+                direction: BubbleDirection.right,
+                position: const BubblePosition.start(12),
+                arrowQuadraticBezierLength: 1,
+              ),
+              margin: const EdgeInsets.all(4),
+              backgroundColor: const Color(0xff98E165),
+              child: const Text(
+                '然而对于微信，你可能更熟悉它',
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              shape: BubbleShapeBorder(
+                direction: BubbleDirection.left,
+                arrowQuadraticBezierLength: 2,
+              ),
+              backgroundColor: const Color(0xff98E165),
+              margin: const EdgeInsets.all(4),
+              child: const Text(
+                '我添加了新的钝角，使三角形不再那么的尖锐',
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            BubbleBox(
+              maxWidth: MediaQuery.of(context).size.width * 0.85,
+              backgroundColor: const Color(0xff98E165),
+              margin: const EdgeInsets.all(4),
+              shape: BubbleShapeBorder(
+                radius: const BorderRadius.only(
+                    topRight: Radius.elliptical(30, 15),
+                    bottomLeft: Radius.elliptical(30, 15)),
+              ),
+              child: const Text(
+                '我对边框radius进行了一些改造,让它更加自由',
+              ),
+            ),
+          ],
+        ),
+      ]),
+    );
   }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
-
-double _angle(angle) {
-  return angle * pi / 180;
 }

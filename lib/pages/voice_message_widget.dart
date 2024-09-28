@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_session/audio_session.dart';
+import 'package:bubble_box/bubble_box.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 //import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
@@ -99,36 +99,43 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
                   padding: EdgeInsets.symmetric(horizontal: 10.w),
                   child: ListView(
                     children: [
-                      ChatBubble(
-                        clipper:
-                            ChatBubbleClipper4(type: BubbleType.sendBubble),
-                        alignment: Alignment.topRight,
-                        margin: const EdgeInsets.only(top: 20),
-                        backGroundColor: HexColor('#54C395'),
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: 0.5.sw,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          BubbleBox(
+                            maxWidth: MediaQuery.of(context).size.width * 0.85,
+                            shape: BubbleShapeBorder(
+                              direction: BubbleDirection.right,
+                              position: const BubblePosition.center(0),
+                              arrowQuadraticBezierLength: 1,
+                            ),
+                            margin: const EdgeInsets.all(4),
+                            backgroundColor: HexColor('#54C395'),
+                            child: Text(
+                              _questionText,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
-                          child: Text(
-                            _questionText,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
+                        ],
                       ),
-                      ChatBubble(
-                        clipper:
-                            ChatBubbleClipper4(type: BubbleType.receiverBubble),
-                        backGroundColor: const Color(0xffE7E7ED),
-                        margin: const EdgeInsets.only(top: 20),
-                        child: Container(
-                          constraints: BoxConstraints(
-                            maxWidth: 0.4.sw,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          BubbleBox(
+                            maxWidth: MediaQuery.of(context).size.width * 0.85,
+                            shape: BubbleShapeBorder(
+                              direction: BubbleDirection.left,
+                              position: const BubblePosition.center(0),
+                              arrowQuadraticBezierLength: 1,
+                            ),
+                            margin: const EdgeInsets.all(4),
+                            backgroundColor: const Color(0xffE7E7ED),
+                            child: Text(
+                              _questionText,
+                              style: const TextStyle(color: Colors.white),
+                            ),
                           ),
-                          child: Text(
-                            _questionText.toString(),
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -368,7 +375,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
   String text = '';
   Future<void> connectToWebSocket() async {
     // 连接到WebSocket服务器
-    channel = IOWebSocketChannel.connect('ws://6.tcp.cpolar.top:13564');
+    channel = IOWebSocketChannel.connect('ws://192.168.1.7:10095');
     await channel?.ready.then((_) {
       List<int> chunkSize = [5, 10, 5];
       Map<String, dynamic> request = {
