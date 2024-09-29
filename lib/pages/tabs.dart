@@ -5,6 +5,7 @@ import 'package:lime/pages/chart.dart';
 import 'package:lime/pages/dtail.dart';
 import 'package:lime/pages/individual.dart';
 import 'package:lime/pages/record.dart';
+import 'package:lime/pages/tables.dart';
 
 final GlobalKey barKey = GlobalKey();
 
@@ -18,12 +19,12 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> {
   int _currentIndex = 1;
 
-  List navigationBarItem =const [
-     Dtail(),
-    Chart(),
-    Record(),
-    Book(),
-    Demo(),
+  List navigationBarItem =[
+     const Dtail(),
+    const Chart(),
+    DataTable2SimpleDemo(),
+    const Book(),
+    const Demo(),
   ];
 
   @override

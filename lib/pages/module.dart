@@ -5,8 +5,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/services.dart';
 import 'package:lime/pages/drag.dart';
 
-import 'nested_tabbar.dart';
-
 class ModuleData {
   final List<Offset> positiones;
   final int index;

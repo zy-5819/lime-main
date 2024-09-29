@@ -53,6 +53,12 @@ dependencies:
   expressions: ^0.2.5+2
   bubble_box: ^0.5.3
   flutter_tts: ^4.0.2
+  syncfusion_flutter_datagrid: ^27.1.50
+  pluto_grid: ^8.0.0
+  data_table_2: ^2.5.15
+  flutter_localizations:
+    sdk: flutter
+  video_player: ^2.9.1
 
 dev_dependencies:
   flutter_test:
