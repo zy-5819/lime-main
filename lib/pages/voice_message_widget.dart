@@ -375,7 +375,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget> {
   String text = '';
   Future<void> connectToWebSocket() async {
     // 连接到WebSocket服务器
-    channel = IOWebSocketChannel.connect('ws://192.168.1.7:10095');
+    channel = IOWebSocketChannel.connect('ws://17.tcp.cpolar.top:12560');
     await channel?.ready.then((_) {
       List<int> chunkSize = [5, 10, 5];
       Map<String, dynamic> request = {

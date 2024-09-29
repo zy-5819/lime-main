@@ -59,6 +59,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   video_player: ^2.9.1
+  image_picker: ^1.1.2
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

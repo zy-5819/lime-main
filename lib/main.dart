@@ -14,9 +14,17 @@ class Main extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: SplashScreen(),
-      
-
+      child: MaterialApp(
+        // 初始化路由名称
+        initialRoute: '/',
+        onGenerateRoute: onGenerateRoute,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.greenAccent,
+          highlightColor: const Color.fromRGBO(0, 0, 0, 0),
+          splashColor: const Color.fromRGBO(0, 0, 0, 0),
+        ),
+      ),
     );
   }
 }

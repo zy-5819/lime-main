@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:lime/pages/drag.dart';
 
 class Record extends StatefulWidget {
   const Record({Key? key}) : super(key: key);
@@ -42,8 +43,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
           child: const Row(
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('日常账本'),
-              Icon(Icons.expand_more),
+              Text('选择模板'),
             ],
           ),
         ),
@@ -56,14 +56,14 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
           indicatorColor: HexColor('#54C395'),
           tabs: [
             Text(
-              '支出',
+              '入库',
               style: TextStyle(
                 fontSize: 17,
                 color: HexColor('#333333'),
               ),
             ),
             Text(
-              '收入',
+              '出库',
               style: TextStyle(
                 fontSize: 17,
                 color: HexColor('#333333'),
@@ -71,36 +71,24 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
             ),
           ],
         ),
-        actions: [
-          InkWell(
-            onTap: (() {
-              Navigator.pop(context);
-            }),
-            child: Container(
-              margin: const EdgeInsets.only(right: 16),
-              alignment: Alignment.center,
-              child: const Text('取消'),
-            ),
-          ),
-        ],
+        // actions: [
+        //   InkWell(
+        //     onTap: (() {
+        //       Navigator.of(context).pop();
+        //     }),
+        //     child: Container(
+        //       margin: const EdgeInsets.only(right: 16),
+        //       alignment: Alignment.center,
+        //       child: const Text('取消'),
+        //     ),
+        //   ),
+        // ],
       ),
       body: TabBarView(
         controller: _tabController,
         children: [
-          GridView.count(
-            // horizontal, this produces 2 rows.
-            crossAxisCount: 4,
-            children: List.generate(8, (index) {
-              return Center(
-                child: Text(
-                  'Item $index',
-                ),
-              );
-            }),
-          ),
-          const Center(
-            child: Text('2'),
-          ),
+          App(),
+          App(),
         ],
       ),
     );

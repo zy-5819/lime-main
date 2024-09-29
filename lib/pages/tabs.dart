@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lime/pages/book.dart';
 import 'package:lime/pages/chart.dart';
+import 'package:lime/pages/drag.dart';
 import 'package:lime/pages/dtail.dart';
+import 'package:lime/pages/image.dart';
 import 'package:lime/pages/individual.dart';
 import 'package:lime/pages/record.dart';
 import 'package:lime/pages/tables.dart';
@@ -19,10 +21,10 @@ class Tabs extends StatefulWidget {
 class _TabsState extends State<Tabs> {
   int _currentIndex = 1;
 
-  List navigationBarItem =[
-     const Dtail(),
-    const Chart(),
+  List navigationBarItem = [
     DataTable2SimpleDemo(),
+    const Chart(),
+    Record(),
     const Book(),
     const Demo(),
   ];
@@ -168,7 +170,7 @@ class _ButtomBarState extends State<ButtomBar> {
           data: Icons.person,
           onTap: widget.onTap,
         ),
-    
+
         // 添加更多 IconButton
       ],
     );

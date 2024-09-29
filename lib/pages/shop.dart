@@ -5,7 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/services.dart';
 import 'package:lime/pages/drag.dart';
 
-class ModuleData {
+class ShopData {
   final List<Offset> positiones;
   final int index;
   final Function(int, int, Widget) itemBuilder;
@@ -13,7 +13,7 @@ class ModuleData {
   final void Function() onLongPress;
   final bool isSave;
 
-  ModuleData(this.isSave,
+  ShopData(this.isSave,
       {required this.positiones,
       required this.index,
       required this.itemBuilder,
@@ -21,14 +21,14 @@ class ModuleData {
       required this.onLongPress});
 }
 
-class Module extends StatefulWidget {
-  final ModuleData data;
-  const Module({Key? key, required this.data}) : super(key: key);
+class ShopModule extends StatefulWidget {
+  final ShopData data;
+  const ShopModule({Key? key, required this.data}) : super(key: key);
   @override
-  State<Module> createState() => _ModuleState();
+  State<ShopModule> createState() => _ShopModuleState();
 }
 
-class _ModuleState extends State<Module> with TickerProviderStateMixin {
+class _ShopModuleState extends State<ShopModule> with TickerProviderStateMixin {
   late TextEditingController _textController;
 
   bool _fontSizeFlage = false;
@@ -60,7 +60,7 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
         // toolbarHeight: 27,
         elevation: 1,
         backgroundColor: HexColor('#fafafa'),
-        title: Text('添加表头'),
+        title: Text('添加店家'),
         leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -69,7 +69,7 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pop(TableItem(
+                Navigator.of(context).pop(ShopItem(
                     onTap: (index) {
                       setState(() {
                         //_children.removeAt(index);
@@ -102,7 +102,7 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: [
-                    Text('表头组件名称：'),
+                    Text('商家名称：'),
                     Expanded(
                         child: TextField(
                       controller: _textController,
@@ -110,49 +110,49 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
                     ))
                   ],
                 ),
-                Row(
-                  children: [
-                    Text('类型：'),
-                    DropdownButton(
-                        icon: Icon(Icons.arrow_right),
-                        iconSize: 40,
-                        iconEnabledColor: Colors.grey.withOpacity(0.7),
-                        hint: Text('请选择类型'),
-                        items: [
-                          DropdownMenuItem(child: Text('文本'), value: 1),
-                          DropdownMenuItem(child: Text('数字'), value: 2),
-                          DropdownMenuItem(child: Text('时间'), value: 3)
-                        ],
-                        onChanged: (value) {})
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Text('类型：'),
+                //     DropdownButton(
+                //         icon: Icon(Icons.arrow_right),
+                //         iconSize: 40,
+                //         iconEnabledColor: Colors.grey.withOpacity(0.7),
+                //         hint: Text('请选择类型'),
+                //         items: [
+                //           DropdownMenuItem(child: Text('文本'), value: 1),
+                //           DropdownMenuItem(child: Text('数字'), value: 2),
+                //           DropdownMenuItem(child: Text('时间'), value: 3)
+                //         ],
+                //         onChanged: (value) {})
+                //   ],
+                // ),
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            constraints: BoxConstraints(minHeight: 50.h),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(20.r))),
-            margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('默认值：'),
-                Wrap(
-                  children: [
-                    Text('data'),
-                    SizedBox(
-                      height: 100,
-                      width: 100,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
+          // Container(
+          //   width: double.infinity,
+          //   constraints: BoxConstraints(minHeight: 50.h),
+          //   decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       borderRadius: BorderRadius.all(Radius.circular(20.r))),
+          //   margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          //   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Text('默认值：'),
+          //       Wrap(
+          //         children: [
+          //           Text('data'),
+          //           SizedBox(
+          //             height: 100,
+          //             width: 100,
+          //           )
+          //         ],
+          //       )
+          //     ],
+          //   ),
+          // ),
         ]),
       )),
     );
