@@ -70,6 +70,7 @@ class _ShopModuleState extends State<ShopModule> with TickerProviderStateMixin {
           IconButton(
               onPressed: () {
                 Navigator.of(context).pop(ShopItem(
+                  currentShopItemLisener: currentShopItem,
                     onTap: (index) {
                       setState(() {
                         //_children.removeAt(index);

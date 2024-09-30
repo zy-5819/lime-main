@@ -2,11 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lime/pages/be.dart';
 import 'package:lime/route/routes.dart';
+import 'package:video_player/video_player.dart';
 
-void main() => runApp(const Main());
+Future<void> main() async {
+     WidgetsFlutterBinding.ensureInitialized();
+  final ValueNotifier<bool> _end = ValueNotifier<bool>(false);
+  final VideoPlayerController _controller =
+      VideoPlayerController.asset('assets/test.mp4');
+  await _controller.initialize().then((_) {
+    _controller.play();
+    _controller.setLooping(false);
+    // 视频播放完毕后跳转到主页面
+    _controller.addListener(() {
+      if (_controller.value.position == _controller.value.duration) {
+        _end.value = true;
+      }
+    });
+  });
+  runApp(Main(
+    end: _end,
+    controller: _controller,
+  ));
+}
 
 class Main extends StatelessWidget {
-  const Main({Key? key}) : super(key: key);
+  final ValueNotifier<bool> end;
+  final VideoPlayerController controller;
+  const Main({Key? key, required this.end, required this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +37,9 @@ class Main extends StatelessWidget {
       designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
-      child: MaterialApp(
-        // 初始化路由名称
-        initialRoute: '/',
-        onGenerateRoute: onGenerateRoute,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.greenAccent,
-          highlightColor: const Color.fromRGBO(0, 0, 0, 0),
-          splashColor: const Color.fromRGBO(0, 0, 0, 0),
-        ),
+      child: SplashScreen(
+        end: end,
+        controller: controller,
       ),
     );
   }

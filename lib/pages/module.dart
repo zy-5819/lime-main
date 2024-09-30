@@ -1,37 +1,29 @@
-import 'package:flutter/foundation.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter/services.dart';
 import 'package:lime/pages/drag.dart';
 
-class ModuleData {
-  final List<Offset> positiones;
-  final int index;
-  final Function(int, int, Widget) itemBuilder;
-  final ValueListenable<bool> valueListenable;
-  final void Function() onLongPress;
+class TableItmeModuleData {
   final bool isSave;
 
-  ModuleData(this.isSave,
-      {required this.positiones,
-      required this.index,
-      required this.itemBuilder,
-      required this.valueListenable,
-      required this.onLongPress});
+  TableItmeModuleData(
+    this.isSave,
+  );
 }
 
-class Module extends StatefulWidget {
-  final ModuleData data;
-  const Module({Key? key, required this.data}) : super(key: key);
+class TableItmeModule extends StatefulWidget {
+  final TableItmeModuleData data;
+  const TableItmeModule({Key? key, required this.data}) : super(key: key);
   @override
-  State<Module> createState() => _ModuleState();
+  State<TableItmeModule> createState() => _TableItmeModuleState();
 }
 
-class _ModuleState extends State<Module> with TickerProviderStateMixin {
+class _TableItmeModuleState extends State<TableItmeModule>
+    with TickerProviderStateMixin {
   late TextEditingController _textController;
-
-  bool _fontSizeFlage = false;
+  CellType _cellType = CellType.text;
   late List<dynamic> _values;
 
   @override
@@ -65,24 +57,16 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back)),
+            icon: const Icon(Icons.arrow_back)),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pop(TableItem(
-                    onTap: (index) {
-                      setState(() {
-                        //_children.removeAt(index);
-                      });
-                    },
-                    text: _textController.text,
-                    color: Colors.pink,
-                    positiones: widget.data.positiones,
-                    isLast: true,
-                    index: widget.data.index + 1,
-                    itemBuilder: widget.data.itemBuilder,
-                    valueListenable: widget.data.valueListenable,
-                    onLongPress: widget.data.onLongPress));
+                Navigator.of(context).pop(TableItemData(
+                  Random().nextDouble().toString(),
+                  name: _textController.text,
+                  type: _cellType,
+                  data: _values,
+                ));
               },
               icon: const Icon(Icons.save))
         ],
@@ -116,14 +100,22 @@ class _ModuleState extends State<Module> with TickerProviderStateMixin {
                     DropdownButton(
                         icon: Icon(Icons.arrow_right),
                         iconSize: 40,
+                        value: _cellType,
                         iconEnabledColor: Colors.grey.withOpacity(0.7),
                         hint: Text('请选择类型'),
                         items: [
-                          DropdownMenuItem(child: Text('文本'), value: 1),
-                          DropdownMenuItem(child: Text('数字'), value: 2),
-                          DropdownMenuItem(child: Text('时间'), value: 3)
+                          DropdownMenuItem<CellType>(
+                              child: Text('文本'), value: CellType.text),
+                          DropdownMenuItem<CellType>(
+                              child: Text('数字'), value: CellType.number),
+                          DropdownMenuItem<CellType>(
+                              child: Text('时间'), value: CellType.DateTime)
                         ],
-                        onChanged: (value) {})
+                        onChanged: (value) {
+                          setState(() {
+                            _cellType = value as CellType;
+                          });
+                        })
                   ],
                 ),
               ],

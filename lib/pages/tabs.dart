@@ -22,7 +22,7 @@ class _TabsState extends State<Tabs> {
   int _currentIndex = 1;
 
   List navigationBarItem = [
-    DataTable2SimpleDemo(),
+    Chart(),
     const Chart(),
     Record(),
     const Book(),

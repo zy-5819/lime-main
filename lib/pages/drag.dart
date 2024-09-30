@@ -5,6 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sortable_wrap/flutter_sortable_wrap.dart';
 import 'package:lime/pages/module.dart';
 import 'package:lime/pages/shop.dart';
+import 'package:lime/pages/tables.dart';
+
+enum CellType {
+  text,
+  number,
+  DateTime,
+}
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -14,8 +21,10 @@ class App extends StatefulWidget {
 }
 
 bool _isUpdate = true;
-ValueNotifier<bool> _contentShow = ValueNotifier(true);
-int _lastIndex = 0;
+ValueNotifier<bool> _contentShow = ValueNotifier(false);
+ValueNotifier<String> currentShopItem = ValueNotifier('test');
+String _currentTableItem = '';
+late SubModuleData subModuleData;
 
 class AppState extends State<App> {
   int _index = 0;
@@ -23,7 +32,8 @@ class AppState extends State<App> {
   late List<Offset> _shopPositiones;
   late List<Offset> _cellPositiones;
   late List<Widget> _shops;
-  late List<Widget> _cells;
+  late List<TableItemData> _tableDatas;
+  late List<Widget> _tableItems;
   late List<Color> colors;
   late int test;
   ValueNotifier<bool> _addShow = ValueNotifier(true);
@@ -33,16 +43,37 @@ class AppState extends State<App> {
   void initState() {
     super.initState();
     _isUpdate = true;
-    _contentShow.value = true;
+    _contentShow.value = false;
+    _currentTableItem = '';
     _shopPositiones = [];
     _cellPositiones = [];
     _shops = [
       SizedBox(
         width: double.infinity,
         height: 0.1.h,
+      ),
+      ShopItem(
+          text: 'test',
+          color: Colors.black,
+          positiones: _shopPositiones,
+          isLast: true,
+          index: 1,
+          valueListenable: _delateShow,
+          onLongPress: () {},
+          onTap: (v) {},
+          currentShopItemLisener: currentShopItem)
+    ];
+    _tableDatas = [
+      TableItemData('1', name: '名称', type: CellType.text, data: []),
+      TableItemData('2', name: '数量', type: CellType.text, data: []),
+      TableItemData('3', name: '单价', type: CellType.text, data: []),
+    ];
+    _tableItems = [
+      SizedBox(
+        width: double.infinity,
+        height: 0.1.h,
       )
     ];
-    _cells = [];
     test = 0;
 
     Color alphaColor(Color color, {int alpha = 128}) => color.withAlpha(alpha);
@@ -55,88 +86,46 @@ class AppState extends State<App> {
       Colors.purpleAccent,
     ];
     colors = colors.map((e) => alphaColor(e)).toList();
-    for (int i = 0; i < 1; i++) {
-      _shops.add(ShopItem(
+
+    for (int i = 0; i < _tableDatas.length; i++) {
+      _tableItems.add(TableItem(
+        data: _tableDatas[i],
         onTap: (index) {
           setState(() {
             _shops.removeAt(index);
           });
         },
-        text: '其他',
-        color: colors[i % colors.length],
-        positiones: _shopPositiones,
-        isLast: i == 20,
-        index: i,
-        valueListenable: _delateShow,
-        onLongPress: () {
-          setState(() {});
-          _delateShow.value = true;
-          _addShow.value = false;
-          _contentShow.value = false;
-        },
-        itemBuilder: (currentIndex, t, widget) {
-          setState(() {
-            if (_isUpdate) {
-              _shops.insert(t + 1, widget);
-              _index = t + 1;
-            } else {
-              _shops.removeAt(_index);
-              if (t == _shopPositiones.length + 1) {
-                _shops.insert(t + 1, widget);
-                _index = t + 1;
-              } else {
-                _shops.insert(t, widget);
-                _index = t;
-              }
-            }
-
-            _lastIndex = currentIndex;
-          });
-        },
-      ));
-    }
-
-    for (int i = 0; i < 3; i++) {
-      _cells.add(TableItem(
-        onTap: (index) {
-          setState(() {
-            _shops.removeAt(index);
-          });
-        },
-        text: i == 0
-            ? '名称'
-            : i == 1
-                ? '数量'
-                : '单价',
+        text: _tableDatas[i].name,
         color: colors[i % colors.length],
         positiones: _cellPositiones,
-        isLast: i == 20,
+        isLast: i == _tableDatas.length - 1,
         index: i,
         valueListenable: _delateShow,
         onLongPress: () {
           setState(() {});
-          _delateShow.value = true;
-          _addShow.value = false;
-          _contentShow.value = false;
+          // _delateShow.value = true;
+          // _addShow.value = false;
+          // _contentShow.value = false;
         },
         itemBuilder: (currentIndex, t, widget) {
-          setState(() {
-            if (_isUpdate) {
-              _shops.insert(t + 1, widget);
-              _index = t + 1;
-            } else {
-              _shops.removeAt(_index);
-              if (t == _shopPositiones.length + 1) {
-                _shops.insert(t + 1, widget);
-                _index = t + 1;
-              } else {
-                _shops.insert(t, widget);
-                _index = t;
-              }
-            }
+          _currentTableItem = _tableDatas[i].id;
+          // setState(() {
+          //   if (_isUpdate) {
+          //     _tableItems.insert(t + 1, widget);
+          //     _index = t + 1;
+          //   } else {
+          //     _tableItems.removeAt(_index);
+          //     if (t == _shopPositiones.length + 1) {
+          //       _tableItems.insert(t + 1, widget);
+          //       _index = t + 1;
+          //     } else {
+          //       _tableItems.insert(t, widget);
+          //       _index = t;
+          //     }
+          //   }
 
-            _lastIndex = currentIndex;
-          });
+          //   //_lastIndex = currentIndex;
+          // });
         },
       ));
     }
@@ -148,26 +137,26 @@ class AppState extends State<App> {
           return ShopModule(
             data: ShopData(true,
                 onLongPress: () {
-                  setState(() {});
-                  _delateShow.value = true;
-                  _addShow.value = false;
-                  _contentShow.value = false;
+                  // setState(() {});
+                  // _delateShow.value = true;
+                  // _addShow.value = false;
+                  // _contentShow.value = false;
                 },
                 positiones: _shopPositiones,
                 index: _shops.length - 2,
                 itemBuilder: (currentIndex, t, widget) {
-                  setState(() {
-                    if (_isUpdate) {
-                      _shops.insert(t + 1, widget);
-                      _index = t + 1;
-                    } else {
-                      _shops.removeAt(_index);
-                      _shops.insert(t, widget);
-                      _index = t;
-                    }
+                  // setState(() {
+                  //   if (_isUpdate) {
+                  //     _shops.insert(t + 1, widget);
+                  //     _index = t + 1;
+                  //   } else {
+                  //     _shops.removeAt(_index);
+                  //     _shops.insert(t, widget);
+                  //     _index = t;
+                  //   }
 
-                    _lastIndex = currentIndex;
-                  });
+                  //   //_lastIndex = currentIndex;
+                  // });
                 },
                 valueListenable: _delateShow),
           );
@@ -177,40 +166,59 @@ class AppState extends State<App> {
         });
       },
     ));
-    _cells.add(_AddButton(
+    _tableItems.add(_AddButton(
       valueListenable: _addShow,
       onTap: () async {
-        var x = await Navigator.of(context)
-            .push<TableItem>(MaterialPageRoute(builder: (context) {
-          return Module(
-            data: ModuleData(true,
-                onLongPress: () {
-                  setState(() {});
-                  _delateShow.value = true;
-                  _addShow.value = false;
-                  _contentShow.value = false;
-                },
-                positiones: _shopPositiones,
-                index: _shops.length - 2,
-                itemBuilder: (currentIndex, t, widget) {
-                  setState(() {
-                    if (_isUpdate) {
-                      _shops.insert(t + 1, widget);
-                      _index = t + 1;
-                    } else {
-                      _shops.removeAt(_index);
-                      _shops.insert(t, widget);
-                      _index = t;
-                    }
-
-                    _lastIndex = currentIndex;
-                  });
-                },
-                valueListenable: _delateShow),
+        var v = await Navigator.of(context)
+            .push<TableItemData>(MaterialPageRoute(builder: (context) {
+          return TableItmeModule(
+            data: TableItmeModuleData(true),
           );
         }));
         setState(() {
-          _cells.insert(_cells.length - 1, x!);
+          _tableDatas.insert(_tableDatas.length - 1, v!);
+          _tableItems.insert(
+              _tableItems.length - 1,
+              TableItem(
+                data: v,
+                onTap: (index) {
+                  setState(() {
+                    _shops.removeAt(index);
+                  });
+                },
+                text: v.name,
+                color: Colors.white,
+                positiones: _cellPositiones,
+                isLast: true,
+                index: _tableDatas.length - 1,
+                valueListenable: _delateShow,
+                onLongPress: () {
+                  // setState(() {});
+                  // _delateShow.value = true;
+                  // _addShow.value = false;
+                  // _contentShow.value = false;
+                },
+                itemBuilder: (currentIndex, t, widget) {
+                  _currentTableItem = v.id;
+                  // setState(() {
+                  //   if (_isUpdate) {
+                  //     _tableItems.insert(t + 1, widget);
+                  //     _index = t + 1;
+                  //   } else {
+                  //     _tableItems.removeAt(_index);
+                  //     if (t == _shopPositiones.length + 1) {
+                  //       _tableItems.insert(t + 1, widget);
+                  //       _index = t + 1;
+                  //     } else {
+                  //       _tableItems.insert(t, widget);
+                  //       _index = t;
+                  //     }
+                  //   }
+
+                  //   //_lastIndex = currentIndex;
+                  // });
+                },
+              ));
         });
       },
     ));
@@ -221,6 +229,7 @@ class AppState extends State<App> {
     for (int i = 0; i < _shops.length; i++) {
       if (_shops[i] is ShopItem) {
         _shops[i] = ShopItem(
+          currentShopItemLisener: currentShopItem,
           onTap: (index) {
             setState(() {
               _shops.removeAt(index);
@@ -233,10 +242,10 @@ class AppState extends State<App> {
           index: i,
           valueListenable: _delateShow,
           onLongPress: () {
-            setState(() {});
-            _delateShow.value = true;
-            _addShow.value = false;
-            _contentShow.value = false;
+            // setState(() {});
+            // _delateShow.value = true;
+            // _addShow.value = false;
+            // _contentShow.value = false;
           },
           itemBuilder: (currentIndex, t, widget) {
             setState(() {
@@ -254,7 +263,7 @@ class AppState extends State<App> {
                 }
               }
 
-              _lastIndex = currentIndex;
+              //_lastIndex = currentIndex;
             });
           },
         );
@@ -282,9 +291,14 @@ class AppState extends State<App> {
     }
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {});
-        _delateShow.value = false;
-        _addShow.value = true;
+        // setState(() {});
+        // _delateShow.value = false;
+        // _addShow.value = true;
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => DataTable2SimpleDemo(
+                  shopName: currentShopItem.value,
+                  data: subModuleData,
+                )));
       }),
       body: SafeArea(
         child: Column(
@@ -310,7 +324,7 @@ class AppState extends State<App> {
                         onSorted: (int oldIndex, int newIndex) {
                           setState(() {
                             _shops.insert(newIndex, _shops.removeAt(oldIndex));
-                            _initData();
+                            //_initData();
                           });
                           // _addShow.value = true;
                           // _delateShow.value = false;
@@ -320,7 +334,7 @@ class AppState extends State<App> {
                           // _delateShow.value = false;
                         },
                         onSortStart: (index) {
-                          _contentShow.value = false;
+                          //_contentShow.value = false;
                           _addShow.value = false;
                           //_delateShow.value = false;
                         },
@@ -347,12 +361,12 @@ class AppState extends State<App> {
                         key: Key(Random().nextDouble().toString()),
                         spacing: 0,
                         runSpacing: 15,
-                        children: _cells,
+                        children: _tableItems,
                         options: options,
                         onSorted: (int oldIndex, int newIndex) {
                           setState(() {
                             _shops.insert(newIndex, _shops.removeAt(oldIndex));
-                            _initData();
+                            // _initData();
                           });
                           // _addShow.value = true;
                           // _delateShow.value = false;
@@ -362,7 +376,7 @@ class AppState extends State<App> {
                           // _delateShow.value = false;
                         },
                         onSortStart: (index) {
-                          _contentShow.value = false;
+                          //_contentShow.value = false;
                           _addShow.value = false;
                           //_delateShow.value = false;
                         },
@@ -390,8 +404,9 @@ class ShopItem extends StatelessWidget {
   final List<Offset> positiones;
   final bool isLast;
   final int index;
-  final void Function(int currentIndex, int index, Widget content) itemBuilder;
+  final void Function(int currentIndex, int index, Widget content)? itemBuilder;
   final ValueListenable<bool> valueListenable;
+  final ValueListenable<String> currentShopItemLisener;
   final void Function() onLongPress;
   final void Function(int index) onTap;
 
@@ -402,10 +417,11 @@ class ShopItem extends StatelessWidget {
     required this.positiones,
     required this.isLast,
     required this.index,
-    required this.itemBuilder,
+    this.itemBuilder,
     required this.valueListenable,
     required this.onLongPress,
     required this.onTap,
+    required this.currentShopItemLisener,
   });
   @override
   Widget build(BuildContext context) {
@@ -431,67 +447,87 @@ class ShopItem extends StatelessWidget {
       });
     }
 
-    return ValueListenableBuilder<bool>(
-        valueListenable: valueListenable,
-        builder: (context, value, child) {
-          return Transform.scale(
-              scale: value ? 1.05 : 1,
-              child: Stack(clipBehavior: Clip.none, children: [
-                AbsorbPointer(
-                  absorbing: value,
-                  child: GestureDetector(
-                      onTap: () {
-                        if (index == _lastIndex) {
-                          _contentShow.value = !_contentShow.value;
-                        } else {
-                          _contentShow.value = true;
-                        }
-                        var i = positiones
-                            .indexWhere((v) => v.dy > positiones[index].dy);
-                        if (i < 0) {
-                          i = positiones.length;
-                        }
-                        i = i + 1;
-                        // itemBuilder.call(index, i, _Content());
-                      },
-                      onLongPressStart: (d) {
-                        onLongPress.call();
-                      },
-                      child: Container(
-                        margin:
-                            EdgeInsets.only(left: 10.w, top: 5.h, bottom: 5.h),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 5.h),
-                        constraints: BoxConstraints(minWidth: 50.w),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                          color: index == _lastIndex ? color : null,
-                        ),
-                        child: Text(
-                          text,
-                          textAlign: TextAlign.center,
-                        ),
-                      )),
-                ),
-                value
-                    ? Positioned(
-                        top: -8,
-                        child: InkWell(
-                          onTap: () {
-                            onTap.call(index);
-                          },
-                          child: Icon(Icons.highlight_remove_outlined),
-                        ))
-                    : const SizedBox.shrink()
-              ]));
+    return ValueListenableBuilder(
+        valueListenable: currentShopItemLisener,
+        builder: (context, currentShopItemText, child) {
+          return ValueListenableBuilder<bool>(
+              valueListenable: valueListenable,
+              builder: (context, value, child) {
+                return Transform.scale(
+                    scale: value ? 1.05 : 1,
+                    child: Stack(clipBehavior: Clip.none, children: [
+                      AbsorbPointer(
+                        absorbing: value,
+                        child: GestureDetector(
+                            onTap: () {
+                              currentShopItem.value = text;
+                              // if (index == _lastIndex) {
+                              //   _contentShow.value = !_contentShow.value;
+                              // } else {
+                              //   _contentShow.value = true;
+                              // }
+                              // var i = positiones
+                              //     .indexWhere((v) => v.dy > positiones[index].dy);
+                              // if (i < 0) {
+                              //   i = positiones.length;
+                              // }
+                              // i = i + 1;
+                              // itemBuilder.call(index, i, _Content());
+                            },
+                            onLongPressStart: (d) {
+                              onLongPress.call();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                  left: 10.w, top: 5.h, bottom: 5.h),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w, vertical: 5.h),
+                              constraints: BoxConstraints(minWidth: 50.w),
+                              decoration: BoxDecoration(
+                                color: currentShopItemText == text
+                                    ? Colors.green
+                                    : null,
+                                border: Border.all(color: Colors.grey),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.r)),
+                                //color:  == _lastIndex ? color : null,
+                              ),
+                              child: Text(
+                                text,
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                      ),
+                      value
+                          ? Positioned(
+                              top: -8,
+                              child: InkWell(
+                                onTap: () {
+                                  onTap.call(index);
+                                },
+                                child: Icon(Icons.highlight_remove_outlined),
+                              ))
+                          : const SizedBox.shrink()
+                    ]));
+              });
         });
   }
 }
 
+class TableItemData {
+  final String id;
+  final String name;
+  final CellType type;
+  final List<dynamic> data;
+
+  TableItemData(this.id,
+      {required this.name, required this.type, required this.data});
+}
+
 class TableItem extends StatelessWidget {
+  final TableItemData data;
   final String text;
-  final Color color;
+  final Color? color;
   final List<Offset> positiones;
   final bool isLast;
   final int index;
@@ -503,7 +539,7 @@ class TableItem extends StatelessWidget {
   const TableItem({
     super.key,
     required this.text,
-    required this.color,
+    this.color,
     required this.positiones,
     required this.isLast,
     required this.index,
@@ -511,6 +547,7 @@ class TableItem extends StatelessWidget {
     required this.valueListenable,
     required this.onLongPress,
     required this.onTap,
+    required this.data,
   });
   @override
   Widget build(BuildContext context) {
@@ -546,27 +583,24 @@ class TableItem extends StatelessWidget {
                   absorbing: value,
                   child: GestureDetector(
                     onTap: () {
-                      if (index == _lastIndex) {
+                      _contentShow.value = true;
+                      if (data.id == _currentTableItem) {
                         _contentShow.value = !_contentShow.value;
-                      } else {
-                        _contentShow.value = true;
                       }
+
                       var i = positiones
                           .indexWhere((v) => v.dy > positiones[index].dy);
                       if (i < 0) {
                         i = positiones.length;
                       }
                       i = i + 1;
-                      print(i);
                       itemBuilder.call(index, i, _Content());
                     },
                     onLongPressStart: (d) {
                       onLongPress.call();
                     },
-                    child: Draggable<String>(
-                      // 返回一个Draggable
-                      // 必须要一个Material，不然拖动时Text会有双下划线
-                      data: text,
+                    child: Draggable<TableItemData>(
+                      data: data,
                       feedback: Material(
                         child: Transform.scale(
                           scale: 1.5,
@@ -578,7 +612,7 @@ class TableItem extends StatelessWidget {
                               border: Border.all(color: Colors.grey),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.r)),
-                              color: color,
+                              //color: color,
                             ),
                             child: Text(
                               text,
@@ -596,7 +630,7 @@ class TableItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey),
                           borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                          color: index == _lastIndex ? color : null,
+                          //color: index == _lastIndex ? color : null,
                         ),
                         child: Text(
                           text,
@@ -715,12 +749,19 @@ class _Module extends StatefulWidget {
 }
 
 class _ModuleState extends State<_Module> {
-  late List<Widget> _children;
+  late List<TableItemData> _children;
+  late List<SubModuleData> datas;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _children = [];
+    datas = [
+      SubModuleData('1', datas: [
+        TableItemData('1', name: '名称', type: CellType.text, data: []),
+        TableItemData('2', name: '数量', type: CellType.text, data: []),
+        TableItemData('3', name: '单价', type: CellType.text, data: []),
+      ]),
+    ];
   }
 
   @override
@@ -732,11 +773,12 @@ class _ModuleState extends State<_Module> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('选择模板:'),
+          const Text('选择模板:'),
           Container(
             width: 1.sw,
-            height: 120.h,
-            child: DragTarget<String>(
+            height: 80.h,
+            color: Colors.grey.withAlpha(100),
+            child: DragTarget<TableItemData>(
               // 用来接收数据的 Widget
               builder: (
                 BuildContext context,
@@ -746,25 +788,32 @@ class _ModuleState extends State<_Module> {
                 return Column(
                   children: [
                     Container(
-                      width: double.infinity,
-                      height: 50.h,
-                      color: Colors.grey.withAlpha(100),
-                      child: Icon(Icons.add),
-                    ),
-                    Container(
                       color: Colors.white,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Wrap(
                           spacing: 10,
-                          children: _children,
+                          children: _children.map((e) {
+                            return Container(
+                              child: Text(e.name),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        TextButton(onPressed: () {}, child: Text('添加')),
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                datas.add(SubModuleData(
+                                    Random().nextDouble().toString(),
+                                    datas: [..._children]));
+                                _children.clear();
+                              });
+                            },
+                            child: Text('添加')),
                         TextButton(
                             onPressed: () {
                               setState(() {
@@ -780,17 +829,14 @@ class _ModuleState extends State<_Module> {
               // 用来接收数据
               onAcceptWithDetails: (data) {
                 setState(() {
-                  _children.add(Container(
-                    height: 30.h,
-                    width: 50.w,
-                    color: Colors.red,
-                    child: Text(data.data),
-                  ));
+                  _children.add(data.data);
                 });
               },
             ),
           ),
-          MyRadioListDemo(),
+          SubModuleListDemo(
+            datas: datas,
+          ),
         ],
       ),
     );
@@ -830,57 +876,71 @@ class _AddButton extends StatelessWidget {
   }
 }
 
-class MyRadioListDemo extends StatefulWidget {
+class SubModuleListDemo extends StatefulWidget {
+  final List<SubModuleData> datas;
+
+  const SubModuleListDemo({super.key, required this.datas});
   @override
-  _MyRadioListDemoState createState() => _MyRadioListDemoState();
+  _SubModuleListDemoState createState() => _SubModuleListDemoState();
 }
 
-class _MyRadioListDemoState extends State<MyRadioListDemo> {
+class _SubModuleListDemoState extends State<SubModuleListDemo> {
   // 用于保存单选按钮的值
-  int _selectedIndex = 0;
+  String _selectedIndex = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    subModuleData = widget.datas.first;
+    _selectedIndex = widget.datas.first.id;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
         child: SingleChildScrollView(
       child: Column(
-        children: <Widget>[
-          RadioListTile<int>(
-            title: Text('选项 1'),
-            value: 0,
-            groupValue: _selectedIndex,
-            onChanged: (value) {
-              setState(() {
-                _selectedIndex = value!;
-              });
-            },
+          children: widget.datas.map<Widget>((e) {
+        return RadioListTile<String>(
+          title: SubModule(
+            children: e.datas.map<Widget>((v) {
+              return Text(v.name);
+            }).toList(),
           ),
-          RadioListTile<int>(
-            title: Text('选项 2'),
-            value: 1,
-            groupValue: _selectedIndex,
-            onChanged: (value) {
-              setState(() {
-                _selectedIndex = value!;
-              });
-            },
-          ),
-          RadioListTile<int>(
-            title: Text('选项 3'),
-            value: 2,
-            groupValue: _selectedIndex,
-            onChanged: (value) {
-              setState(() {
-                _selectedIndex = value!;
-              });
-            },
-          ),
-          Text(
-            '已选项: ${_selectedIndex == 0 ? '选项 1' : _selectedIndex == 1 ? '选项 2' : '选项 3'}',
-            style: TextStyle(fontSize: 20),
-          ),
-        ],
-      ),
+          value: e.id,
+          groupValue: _selectedIndex,
+          onChanged: (value) {
+            setState(() {
+              _selectedIndex = value!;
+              subModuleData =
+                  widget.datas.firstWhere((element) => element.id == value);
+            });
+          },
+        );
+      }).toList()),
     ));
+  }
+}
+
+class SubModuleData {
+  final String id;
+  final List<TableItemData> datas;
+
+  SubModuleData(this.id, {required this.datas});
+}
+
+class SubModule extends StatelessWidget {
+  final List<Widget> children;
+
+  const SubModule({super.key, required this.children});
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Wrap(
+        spacing: 10,
+        children: children,
+      ),
+    );
   }
 }

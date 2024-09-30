@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:audio_session/audio_session.dart';
 import 'package:bubble_box/bubble_box.dart';
@@ -15,7 +16,9 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:lime/pages/drag.dart';
 import 'package:lime/pages/individual.dart';
+import 'package:lime/pages/tables.dart';
 //import 'package:lime/pages/qipao.dart';
 import 'package:lime/pages/tabs.dart';
 //import 'package:lime/pages/test2.dart';
@@ -27,7 +30,10 @@ import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class VoiceCommandButton extends StatefulWidget {
-  const VoiceCommandButton({super.key});
+  final SubModuleData data;
+  final Function(List<String>) onResult;
+  const VoiceCommandButton(
+      {super.key, required this.data, required this.onResult});
   @override
   State<StatefulWidget> createState() => _VoiceCommandButtonState();
 }
@@ -35,6 +41,7 @@ class VoiceCommandButton extends StatefulWidget {
 class _VoiceCommandButtonState extends State<VoiceCommandButton> {
   OverlayEntry? _response;
   String _questionText = '';
+  String _result = '';
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,9 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
           // if (data == null) {
           //   return;
           // }
+          //_questionText = data;
           _questionText = data;
+          widget.onResult.call(_spilt(_questionText));
           _response?.remove();
           _response?.dispose();
           _response = null;
@@ -62,6 +71,22 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
         // _response = null;
       },
     );
+  }
+
+  List<String> _spilt(String text) {
+    List<String> result = List.filled(widget.data.datas.length, '');
+    RegExp regex = RegExp(r'[ ,]+'); // 匹配一个或多个逗号或空格
+    var splitByRegex = text.split(regex);
+    if (result.length < splitByRegex.length) {
+      result = splitByRegex.sublist(0, widget.data.datas.length);
+    } else if (result.length > splitByRegex.length) {
+      for (int i = 0; i < splitByRegex.length; i++) {
+        result[i] = splitByRegex[i];
+      }
+    } else {
+      result = splitByRegex;
+    }
+    return result;
   }
 
   Future<void> _showResponse() async {
@@ -130,9 +155,12 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
                             ),
                             margin: const EdgeInsets.all(4),
                             backgroundColor: const Color(0xffE7E7ED),
-                            child: Text(
-                              _questionText,
-                              style: const TextStyle(color: Colors.white),
+                            child: Wrap(
+                              children: _spilt(_questionText).map((e) {
+                                return Card(
+                                  child: Text(e),
+                                );
+                              }).toList(),
                             ),
                           ),
                         ],
@@ -168,6 +196,9 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
     });
 
     Overlay.of(context).insert(_response!);
+    await Future.delayed(const Duration(seconds: 1));
+    _response?.remove();
+    _response = null;
   }
 
   @override

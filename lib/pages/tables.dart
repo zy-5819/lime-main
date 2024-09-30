@@ -1,22 +1,43 @@
 import 'package:flutter/material.dart';
 
 import 'package:data_table_2/data_table_2.dart';
-import 'package:flutter/rendering.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lime/pages/book.dart';
+import 'package:lime/pages/drag.dart';
+import 'package:lime/pages/voice_message_widget.dart';
 
 /// Example without a datasource
 class DataTable2SimpleDemo extends StatelessWidget {
-  const DataTable2SimpleDemo();
+  final SubModuleData data;
+  final String shopName;
+  const DataTable2SimpleDemo(
+      {super.key, required this.data, required this.shopName});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Table(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$shopName的记账'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                numberKeypan(context: context);
+              },
+              icon: const Icon(Icons.add))
+        ],
+      ),
+      body: Table(
+        data: data,
+      ),
     );
   }
 }
 
 class Table extends StatefulWidget {
+  final SubModuleData data;
+
+  const Table({super.key, required this.data});
   @override
   _TableState createState() => _TableState();
 }
@@ -24,47 +45,39 @@ class Table extends StatefulWidget {
 class _TableState extends State<Table> {
   late List<DataColumn> columns;
   late List<DataRow> rows;
+  late FocusNode? _focusNode;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    columns = [
-      DataColumn2(
-        label: Text('Column A'),
-        size: ColumnSize.L,
-      ),
-      DataColumn(
-        label: Text('Column B'),
-      ),
-      DataColumn(
-        label: Text('Column C'),
-      ),
-      DataColumn(
-        label: Text('Column D'),
-      ),
-      DataColumn(
-        label: Text('Column NUMBERS'),
-        numeric: true,
-      ),
-    ];
+    _focusNode =null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      numberKeypan(context: context, focusNode: _focusNode);
+    });
+    columns = widget.data.datas
+        .map((e) => DataColumn2(size: ColumnSize.M, label: Text(e.name)))
+        .toList();
     rows = [
       DataRow(cells: [
-        DataCell(EditableTextExample()),
         DataCell(EditableTextExample(
-          text: '22',
+          onTap: (node) {
+            setState(() {
+              _focusNode = node;
+            });
+          },
+          text: '番茄',
         )),
-        DataCell(Text('C')),
-        DataCell(Text('D')),
-        DataCell(Text('25.4')),
+        DataCell(EditableTextExample(          onTap: (node) {
+            setState(() {
+              _focusNode = node;
+            });
+          },),),
+        DataCell(EditableTextExample(          onTap: (node) {
+            setState(() {
+              _focusNode = node;
+            });
+          },)),
       ]),
-      DataRow(cells: [
-        DataCell(EditableTextExample()),
-        DataCell(Text('B')),
-        DataCell(Text('C')),
-        DataCell(Text('D')),
-        DataCell(Text('25.4')),
-      ])
     ];
   }
 
@@ -76,35 +89,39 @@ class _TableState extends State<Table> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            rows.add(DataRow(cells: [
-              DataCell(EditableTextExample()),
-              DataCell(Text('')),
-              DataCell(Text('')),
-              DataCell(Text('')),
-              DataCell(Text('')),
-            ]));
-          });
-        },
+      floatingActionButton: VoiceCommandButton(
+          data: widget.data,
+          onResult: (v) {
+            setState(() {
+              rows.add(DataRow(
+                  cells: v
+                      .map((e) => DataCell(EditableTextExample(text: e,          onTap: (node) {
+            setState(() {
+              _focusNode = node;
+            });
+          },)))
+                      .toList()));
+            });
+          }),
+      body: GestureDetector(
+        child: DataTable2(
+            columnSpacing: 12,
+            horizontalMargin: 12,
+            smRatio: 0,
+            dividerThickness: 0,
+            columns: columns,
+            rows: rows),
+        onTap: disKeypan,
       ),
-      body: DataTable2(
-          columnSpacing: 12,
-          horizontalMargin: 12,
-          minWidth: 600,
-          smRatio: 0,
-          dividerThickness: 0,
-          columns: columns,
-          rows: rows),
     );
   }
 }
 
 class EditableTextExample extends StatefulWidget {
   final String? text;
+  final Function(FocusNode node)? onTap;
 
-  const EditableTextExample({super.key, this.text});
+  const EditableTextExample({super.key, this.text, this.onTap});
   @override
   _EditableTextExampleState createState() => _EditableTextExampleState();
 }
@@ -143,7 +160,7 @@ class _EditableTextExampleState extends State<EditableTextExample> {
   Widget build(BuildContext context) {
     return TextField(
       decoration: InputDecoration(
-        hintText: 'afasdfa',
+        hintText: '空',
         border: InputBorder.none,
       ),
       controller: _controller,
@@ -158,6 +175,7 @@ class _EditableTextExampleState extends State<EditableTextExample> {
         print('Submitted: $value');
       },
       onTap: () {
+        widget.onTap?.call(_focusNode);
         print('Tap');
       },
     );

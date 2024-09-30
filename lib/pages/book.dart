@@ -30,6 +30,7 @@ OverlayEntry? overlayEntry;
 numberKeypan({
   //required Function(String) onTap,
   required BuildContext context,
+  FocusNode? focusNode,
   Function? onCommit,
   Function? onDel,
 }) {
@@ -38,6 +39,7 @@ numberKeypan({
       bottom: MediaQuery.of(context).viewInsets.bottom,
       child: Material(
         child: Calculator(
+          focusNode: focusNode,
           onCommit: onCommit,
           onDel: onDel,
         ),
@@ -534,7 +536,9 @@ class _LongPressColorChangeWidgetState extends State<LongPressColorChangeWidget>
 class Calculator extends StatefulWidget {
   final Function? onCommit;
   final Function? onDel;
-  const Calculator({Key? key, this.onCommit, this.onDel}) : super(key: key);
+  final FocusNode? focusNode;
+  const Calculator({Key? key, this.onCommit, this.onDel, this.focusNode})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _calculatorState();
@@ -557,7 +561,7 @@ class _calculatorState extends State<Calculator> {
   ];
   String _input = '';
   String _result = '';
-  late FocusNode _focusNode;
+  late FocusNode? _focusNode;
   late TextEditingController _textEditingController;
   late bool _isCounting;
   late bool _isSpeeching;
@@ -573,7 +577,7 @@ class _calculatorState extends State<Calculator> {
   @override
   void initState() {
     super.initState();
-    _focusNode = FocusNode();
+    _focusNode = widget.focusNode;
     _textEditingController = TextEditingController();
     _isCounting = false;
     _isSpeeching = false;
@@ -597,7 +601,7 @@ class _calculatorState extends State<Calculator> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _focusNode.dispose();
+    _focusNode?.dispose();
     _textEditingController.dispose();
   }
 
@@ -721,9 +725,7 @@ class _calculatorState extends State<Calculator> {
             duration: const Duration(seconds: 5),
             height: MediaQuery.of(context).viewInsets.bottom > 0
                 ? 0
-                : _focusNode.hasFocus
-                    ? null
-                    : null,
+                :null,
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 200,
@@ -767,6 +769,7 @@ class _calculatorState extends State<Calculator> {
                             splashColor: Colors.grey,
                             onPressed: () {
                               // disKeypan();
+                              _focusNode?.nextFocus();
                               widget.onCommit?.call();
                             },
                             elevation: 0,

@@ -157,12 +157,14 @@ class _MyAppState extends State<Demo> {
           const Center(
             child: Text('data'),
           ),
-          Positioned(
-              bottom: 0.01.sh,
-              child: SizedBox(
-                width: 1.sw,
-                child: const VoiceCommandButton(),
-              ))
+          // Positioned(
+          //     bottom: 0.01.sh,
+          //     child: SizedBox(
+          //       width: 1.sw,
+          //       child: const VoiceCommandButton(
+
+          //       ),
+          //     ))
         ],
       ),
     );
