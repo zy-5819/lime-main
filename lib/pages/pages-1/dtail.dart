@@ -28,7 +28,8 @@ class Dtail extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
+                      margin:
+                          const EdgeInsets.only(left: 16, right: 16, top: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -194,7 +195,7 @@ class Dtail extends StatelessWidget {
                                   '今天',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: HexColor('#666666'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 5),
@@ -202,7 +203,7 @@ class Dtail extends StatelessWidget {
                                   '06月15日 星期三',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -213,7 +214,7 @@ class Dtail extends StatelessWidget {
                                   '收入：12.12',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -221,7 +222,7 @@ class Dtail extends StatelessWidget {
                                   '支出：782.30',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -231,85 +232,88 @@ class Dtail extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Divider(height: 1, color: HexColor('#cccccc')),
+                  Divider(height: 1, color: HexColor('#666666')),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
@@ -331,7 +335,7 @@ class Dtail extends StatelessWidget {
                                   '今天',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: HexColor('#666666'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 5),
@@ -339,7 +343,7 @@ class Dtail extends StatelessWidget {
                                   '06月15日 星期三',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -350,7 +354,7 @@ class Dtail extends StatelessWidget {
                                   '收入：12.12',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -358,7 +362,7 @@ class Dtail extends StatelessWidget {
                                   '支出：782.30',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -368,85 +372,88 @@ class Dtail extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Divider(height: 1, color: HexColor('#cccccc')),
+                  Divider(height: 1, color: HexColor('#666666')),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
@@ -468,7 +475,7 @@ class Dtail extends StatelessWidget {
                                   '今天',
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: HexColor('#666666'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 5),
@@ -476,7 +483,7 @@ class Dtail extends StatelessWidget {
                                   '06月15日 星期三',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -487,7 +494,7 @@ class Dtail extends StatelessWidget {
                                   '收入：12.12',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -495,7 +502,7 @@ class Dtail extends StatelessWidget {
                                   '支出：782.30',
                                   style: TextStyle(
                                     fontSize: 11,
-                                    color: HexColor('#999999'),
+                                    color: null,
                                   ),
                                 ),
                               ],
@@ -505,85 +512,88 @@ class Dtail extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Divider(height: 1, color: HexColor('#cccccc')),
+                  Divider(height: 1, color: HexColor('#666666')),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),
                   ListTile(
                     leading: CircleAvatar(
                       backgroundColor: null,
-                      child: Icon(Icons.home, color: Theme.of(context).colorScheme.primary),
+                      child: Icon(Icons.home,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                     title: Text(
                       '早餐',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                     subtitle: Text(
                       '[包子、豆浆、油条] [图片]',
                       style: TextStyle(
                         fontSize: 11,
-                        color: HexColor('#999999'),
+                        color: null,
                       ),
                     ),
                     trailing: Text(
                       '-10￥',
                       style: TextStyle(
                         fontSize: 14,
-                        color: HexColor('#666666'),
+                        color: null,
                       ),
                     ),
                   ),

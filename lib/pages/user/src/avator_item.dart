@@ -17,10 +17,11 @@ class _AvatorItem extends HookConsumerWidget {
       child: Row(
         children: [
           ClipOval(
-            child: SizedBox(
+            child: Container(
               width: 64.r,
               height: 64.r,
-              child: Image.asset(kUserProfileImage, fit: BoxFit.cover),
+              color: theme.colorScheme.primary,
+              //child: Image.asset(kUserProfileImage, fit: BoxFit.cover),
             ),
           ),
           SizedBox(width: 12.w),
@@ -54,5 +55,5 @@ class _AvatorItem extends HookConsumerWidget {
 }
 
 final _usernameProvider = Provider.autoDispose<String>((ref) {
-  return  '';
+  return '';
 });

@@ -134,7 +134,8 @@ class _VoiceCommandButtonState extends State<VoiceCommandButton> {
                               arrowQuadraticBezierLength: 1,
                             ),
                             margin: const EdgeInsets.all(4),
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
                             child: Text(
                               _questionText,
                               style: const TextStyle(color: Colors.white),
@@ -577,7 +578,8 @@ class _BottomView extends StatelessWidget {
               alignment: Alignment.topCenter,
               width: 2.2.sw,
               height: 1.sh,
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [

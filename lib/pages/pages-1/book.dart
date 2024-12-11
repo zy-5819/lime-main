@@ -105,8 +105,10 @@ disKeypan() {
 }
 
 class OverlayTooltip extends StatefulWidget {
+  const OverlayTooltip({super.key});
+
   @override
-  _OverlayTooltipState createState() => _OverlayTooltipState();
+  createState() => _OverlayTooltipState();
 }
 
 class _OverlayTooltipState extends State<OverlayTooltip> {
@@ -472,7 +474,8 @@ class _LongPressColorChangeWidgetState extends State<LongPressColorChangeWidget>
 
   @override
   Widget build(BuildContext context) {
-    Color color = _isLongPressed ? Colors.grey : Colors.white;
+    Color color =
+        _isLongPressed ? Colors.grey : Theme.of(context).colorScheme.onPrimary;
 
     return Stack(
       children: [
@@ -648,7 +651,7 @@ class _calculatorState extends State<Calculator> {
           Ink(
               height: 50,
               width: double.infinity,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimaryFixed,
               child: Row(
                 children: [
                   Expanded(
@@ -702,7 +705,7 @@ class _calculatorState extends State<Calculator> {
                   ),
                   InkWell(
                     onTap: () {
-                      FocusScope.of(context).requestFocus(_focusNode);
+                      disKeypan();
                     },
                     borderRadius: BorderRadius.circular(40),
                     splashColor: Colors.grey,
@@ -723,9 +726,7 @@ class _calculatorState extends State<Calculator> {
           AnimatedContainer(
             curve: const Cubic(0.160, 0.265, 0.125, 0.995),
             duration: const Duration(seconds: 5),
-            height: MediaQuery.of(context).viewInsets.bottom > 0
-                ? 0
-                :null,
+            height: MediaQuery.of(context).viewInsets.bottom > 0 ? 0 : null,
             child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 200,
@@ -745,14 +746,19 @@ class _calculatorState extends State<Calculator> {
                               widget.onDel?.call();
                             },
                             color: _enableSpeech
-                                ? Colors.white
-                                : Colors.grey.withAlpha(0),
+                                ? Theme.of(context).colorScheme.primaryContainer
+                                : Theme.of(context).colorScheme.outline,
                             elevation: 2,
                             splashColor: Colors.grey,
                             padding: const EdgeInsets.all(0),
-                            child: Icon(_enableSpeech
-                                ? CupertinoIcons.speaker_slash
-                                : CupertinoIcons.speaker_2),
+                            child: Icon(
+                              _enableSpeech
+                                  ? CupertinoIcons.speaker_slash
+                                  : CupertinoIcons.speaker_2,
+                              color: _enableSpeech
+                                  ? null
+                                  : Theme.of(context).colorScheme.onPrimary,
+                            ),
                           ),
                         ),
                         Container(
@@ -772,8 +778,9 @@ class _calculatorState extends State<Calculator> {
                               _focusNode?.nextFocus();
                               widget.onCommit?.call();
                             },
+                            color: Theme.of(context).colorScheme.onPrimaryFixed,
                             elevation: 0,
-                            child: const Text(
+                            child: Text(
                               '下一项',
                               textAlign: TextAlign.center,
                             ),
@@ -788,7 +795,7 @@ class _calculatorState extends State<Calculator> {
                               // disKeypan();
                               widget.onCommit?.call();
                             },
-                            color: Colors.blue,
+                            color: Theme.of(context).colorScheme.primary,
                             elevation: 0,
                             padding: const EdgeInsets.all(0),
                             child: const Text(
@@ -806,7 +813,7 @@ class _calculatorState extends State<Calculator> {
                         alignment: WrapAlignment.spaceBetween,
                         children: List.generate(list.length, (index) {
                           return Ink(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onPrimaryFixed,
                             child: InkWell(
                               splashColor: Colors.grey,
                               child: Container(
@@ -864,7 +871,11 @@ class _calculatorState extends State<Calculator> {
                                   });
                                 }
                               },
-                              color: _isSpeeching ? Colors.red : Colors.white,
+                              color: _isSpeeching
+                                  ? Colors.red
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryFixed,
                               child: _isSpeeching
                                   ? Text(
                                       '滑到此处取消',
@@ -878,20 +889,25 @@ class _calculatorState extends State<Calculator> {
                             ),
                           ),
                           Ink(
-                            color: Colors.white,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryFixed
+                                .withOpacity(0.7),
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            padding: EdgeInsets.symmetric(vertical: 5.h),
                             child: Wrap(
                               alignment: WrapAlignment.spaceEvenly,
-                              runSpacing: 15.h,
+                              runSpacing: 10.h,
                               children: [
                                 SizedBox(
                                     width: 35.sp, // 宽度和高度相同以实现圆形
                                     height: 35.sp,
                                     child: MaterialButton(
                                       shape: const CircleBorder(),
-                                      elevation: 2,
-                                      color: Colors.white,
+                                      elevation: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryFixed,
                                       padding: EdgeInsets.zero,
                                       splashColor: Colors.grey,
                                       onPressed: () async {
@@ -911,8 +927,10 @@ class _calculatorState extends State<Calculator> {
                                       shape: const CircleBorder(),
                                       padding: EdgeInsets.zero,
                                       splashColor: Colors.grey,
-                                      elevation: 2,
-                                      color: Colors.white,
+                                      elevation: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryFixed,
                                       onPressed: () async {
                                         _speak('减');
                                         _isCounting = true;
@@ -928,8 +946,10 @@ class _calculatorState extends State<Calculator> {
                                     height: 35.sp,
                                     child: MaterialButton(
                                       shape: const CircleBorder(),
-                                      elevation: 2,
-                                      color: Colors.white,
+                                      elevation: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryFixed,
                                       padding: EdgeInsets.zero,
                                       splashColor: Colors.grey,
                                       onPressed: () async {
@@ -947,8 +967,10 @@ class _calculatorState extends State<Calculator> {
                                     height: 35.sp,
                                     child: MaterialButton(
                                       shape: const CircleBorder(),
-                                      elevation: 2,
-                                      color: Colors.white,
+                                      elevation: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryFixed,
                                       padding: EdgeInsets.zero,
                                       splashColor: Colors.grey,
                                       onPressed: () async {
@@ -975,7 +997,7 @@ class _calculatorState extends State<Calculator> {
                               widget.onCommit?.call();
                             },
                             splashColor: Colors.grey,
-                            color: Colors.blue,
+                            color: Theme.of(context).colorScheme.primary,
                             child: !_isCounting
                                 ? const Text(
                                     "确 认",

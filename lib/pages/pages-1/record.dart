@@ -35,8 +35,7 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: HexColor('#fafafa'),
-        foregroundColor: HexColor('#000000'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 1,
         leading: Container(
           margin: const EdgeInsets.only(left: 16),
@@ -59,14 +58,12 @@ class _RecordState extends State<Record> with TickerProviderStateMixin {
               '入库',
               style: TextStyle(
                 fontSize: 17,
-                color: HexColor('#333333'),
               ),
             ),
             Text(
               '出库',
               style: TextStyle(
                 fontSize: 17,
-                color: HexColor('#333333'),
               ),
             ),
           ],

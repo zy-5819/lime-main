@@ -99,8 +99,42 @@ class _NestedTabbarState extends State<NestedTabbar>
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           child: Text(
                             '05.2022',
-                            style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
+                            style: TextStyle(color: null, fontSize: 11),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '05.2022',
+                            style: TextStyle(color: null, fontSize: 11),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '05.2022',
+                            style: TextStyle(color: null, fontSize: 11),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '05.2022',
+                            style: TextStyle(color: null, fontSize: 11),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '05.2022',
+                            style: TextStyle(color: null, fontSize: 11),
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            '05.2022',
+                            style: TextStyle(color: null, fontSize: 11),
                           ),
                         ),
                         Container(
@@ -108,47 +142,7 @@ class _NestedTabbarState extends State<NestedTabbar>
                           child: Text(
                             '05.2022',
                             style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '05.2022',
-                            style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '05.2022',
-                            style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '05.2022',
-                            style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '05.2022',
-                            style: TextStyle(
-                                color: HexColor('#999999'), fontSize: 11),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            '05.2022',
-                            style: TextStyle(
-                              color: HexColor('#999999'),
+                              color: null,
                               fontSize: 11,
                             ),
                           ),
@@ -246,7 +240,8 @@ class _NestedTabbarState extends State<NestedTabbar>
                         Column(
                           children: [
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 10),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               alignment: Alignment.centerLeft,
                               child: const Text(
                                 '支出排行榜',
@@ -258,13 +253,14 @@ class _NestedTabbarState extends State<NestedTabbar>
                               leading: CircleAvatar(
                                 backgroundColor: null,
                                 child: Icon(Icons.home,
-                                    color: Theme.of(context).colorScheme.primary),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              title: Text(
+                              title: const Text(
                                 '早餐 80%',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                               subtitle: SizedBox(
@@ -284,7 +280,7 @@ class _NestedTabbarState extends State<NestedTabbar>
                                 '-10￥',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                             ),
@@ -292,13 +288,14 @@ class _NestedTabbarState extends State<NestedTabbar>
                               leading: CircleAvatar(
                                 backgroundColor: null,
                                 child: Icon(Icons.home,
-                                    color: Theme.of(context).colorScheme.primary),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                               title: Text(
                                 '早餐 80%',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                               subtitle: SizedBox(
@@ -318,7 +315,7 @@ class _NestedTabbarState extends State<NestedTabbar>
                                 '-10￥',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                             ),
@@ -326,13 +323,14 @@ class _NestedTabbarState extends State<NestedTabbar>
                               leading: CircleAvatar(
                                 backgroundColor: null,
                                 child: Icon(Icons.home,
-                                    color: Theme.of(context).colorScheme.primary),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                               title: Text(
                                 '早餐 80%',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                               subtitle: SizedBox(
@@ -352,7 +350,7 @@ class _NestedTabbarState extends State<NestedTabbar>
                                 '-10￥',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                             ),
@@ -360,13 +358,14 @@ class _NestedTabbarState extends State<NestedTabbar>
                               leading: CircleAvatar(
                                 backgroundColor: null,
                                 child: Icon(Icons.home,
-                                    color: Theme.of(context).colorScheme.primary),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
                               title: Text(
                                 '早餐 80%',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                               subtitle: SizedBox(
@@ -386,7 +385,7 @@ class _NestedTabbarState extends State<NestedTabbar>
                                 '-10￥',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: HexColor('#666666'),
+                                  color: null,
                                 ),
                               ),
                             ),

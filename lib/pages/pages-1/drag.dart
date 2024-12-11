@@ -53,7 +53,7 @@ class AppState extends State<App> {
         height: 0.1.h,
       ),
       ShopItem(
-          text: 'test',
+          text: 'test2',
           color: Colors.black,
           positiones: _shopPositiones,
           isLast: true,
@@ -457,8 +457,8 @@ class ShopItem extends StatelessWidget {
                     scale: value ? 1.05 : 1,
                     child: Stack(clipBehavior: Clip.none, children: [
                       AbsorbPointer(
-                        absorbing: value,
-                        child: GestureDetector(
+                          absorbing: value,
+                          child: GestureDetector(
                             onTap: () {
                               currentShopItem.value = text;
                               // if (index == _lastIndex) {
@@ -485,19 +485,23 @@ class ShopItem extends StatelessWidget {
                               constraints: BoxConstraints(minWidth: 50.w),
                               decoration: BoxDecoration(
                                 color: currentShopItemText == text
-                                    ? Colors.green
+                                    ? Theme.of(context).colorScheme.primary
                                     : null,
                                 border: Border.all(color: Colors.grey),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10.r)),
                                 //color:  == _lastIndex ? color : null,
                               ),
-                              child: Text(
-                                text,
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                      ),
+                              child: Text(text,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: currentShopItemText == text
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary
+                                          : null)),
+                            ),
+                          )),
                       value
                           ? Positioned(
                               top: -8,
